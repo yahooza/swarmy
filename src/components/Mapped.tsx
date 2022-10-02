@@ -1,7 +1,7 @@
 import type { LatLngExpression } from 'leaflet';
 import type { CSSStyles, FoursquareVenue, FoursquareVenueWithCheckins } from '../App.types'
 import * as React from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 import MappedMarkersAndPopups from './MappedMarkersAndPopups';
 
 type Props = {
