@@ -1,28 +1,85 @@
+import type { CSSStyles, FoursquareVenue, FoursquareCheckin, FoursquareVenueWithCheckins } from './App.types'
+import type { LatLngExpression } from 'leaflet';
+
 import * as React from 'react';
-import { LatLngExpression } from 'leaflet';
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
+import Header from './components/Header';
+import Mapped from './components/Mapped';
+import { useState, useEffect, useRef } from 'react';
+import { subMonths } from 'date-fns'
+
+
+const getPastMonth = () => {
+  const now = new Date()
+  return [now.getTime(), subMonths(now, 1).getTime()]
+}
 
 type Props = {
+  token: string,
+  limit? : number,
+  range?: [number, number],
   origin: LatLngExpression,
-  zoom?: number
+  zoom?: number,
+  styles: CSSStyles
 }
 
-const Map = ({ origin, zoom }: Props) => {
-  console.log('leaflet', origin, zoom)
+const App = ({ token, limit, range, origin, zoom = 13, styles }: Props) => {
+  const [apiToken] = useState(token ?? null);
+  const [timeRange] = useState(range ?? getPastMonth())
+  const [venues, setVenues] = useState(new Map<string, FoursquareVenue>())
+  const [checkins, setCheckins] = useState<FoursquareCheckin[] | null>([]);
+  const [activeVenueWithCheckins, setActiveVenueWithCheckins] = useState<FoursquareVenueWithCheckins | null>(null);
+
+  useEffect(() => {
+    fetch('https://api.foursquare.com/v2/users/self/checkins?' + 
+      new URLSearchParams({
+        'v'               : '20130101',
+        'limit'           : (limit ?? 100).toString(),
+        'oauth_token'     : apiToken,
+        'format'          : 'json',
+        'after_timestamp' : timeRange[0].toString(),
+        'before_timestamp': timeRange[1].toString()
+    }))
+      .then((response) => response.json())
+      .then((data) => {
+        const newCheckins = data.response.checkins.items
+        setCheckins(checkins.concat(newCheckins));
+
+        newCheckins.forEach((checkin: FoursquareCheckin) => {
+          const {venue} = checkin;
+          if (venues.has(venue.id)) {
+            return
+          }
+          venues.set(venue.id, venue)
+        })
+
+        setVenues(new Map([...venues]))
+      });
+  }, [apiToken, timeRange])
+
+  const onVenueSelected = (venueId: string | null) => {
+    if (!venues.has(venueId)) {
+      return;
+    }
+    setActiveVenueWithCheckins({
+      venue: venues.get(venueId),
+      checkins: checkins.filter(checkin => checkin.venue.id === venueId)
+    })
+    return;
+  }
+
   return (
-    <MapContainer style={{ width: 'inherit', height: 'inherit' }} center={origin} zoom={zoom} scrollWheelZoom={false}>
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    <>
+      <Header venues={venues} onVenueSelected={onVenueSelected} />
+      <Mapped
+        venues={venues}
+        selectedVenueWithCheckins={activeVenueWithCheckins}
+        onVenueSelected={onVenueSelected}
+        origin={origin}
+        zoom={zoom}
+        styles={styles}
       />
-      <Marker position={origin}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
-    </MapContainer>
-  )
+    </>
+  );
 }
 
-export default Map
+export default App

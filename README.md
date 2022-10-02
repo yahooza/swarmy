@@ -6,3 +6,8 @@ Fourmaps: updated with modern JavaScript
 
 
 
+## Reference
+### Foursquare API
+
+* Checkins: [https://developer.foursquare.com/reference/checkins](https://developer.foursquare.com/reference/checkins)
+* Venues: [https://developer.foursquare.com/reference/venues](https://developer.foursquare.com/reference/venues)
