@@ -1,12 +1,13 @@
 import type { LatLngExpression } from 'leaflet';
-import type { CSSStyles, FoursquareVenue, FoursquareVenueWithCheckins } from '../App.types'
+import type { CSSStyles, FoursquareVenue, FoursquareVenueWithCheckins } from '../index.types'
 import * as React from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
-import MappedMarkersAndPopups from './MappedMarkersAndPopups';
+import MappedPoppedUp from './MappedPoppedUp';
+import MappedMarkers from './MappedMarkers';
 
 type Props = {
   venues: Map<string, FoursquareVenue>,
-  selectedVenueWithCheckins: FoursquareVenueWithCheckins,
+  selectedVenueWithCheckins: FoursquareVenueWithCheckins | null | undefined,
   onVenueSelected: (venueId: string | null) => void,
   origin: LatLngExpression,
   zoom?: number,
@@ -28,17 +29,19 @@ const Mapped = ({
       zoom={zoom} 
       scrollWheelZoom={false}
     >
-      <>
-        <MappedMarkersAndPopups 
-          venues={venues}
-          selectedVenueWithCheckins={selectedVenueWithCheckins}
-          onVenueSelected={onVenueSelected}
+      <MappedMarkers 
+        venues={venues}
+        onVenueSelected={onVenueSelected}
+      />
+      {selectedVenueWithCheckins && (
+        <MappedPoppedUp 
+          selectedVenueWithCheckins={selectedVenueWithCheckins} 
         />
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-      </>
+      )}
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
     </MapContainer>
   )
 }

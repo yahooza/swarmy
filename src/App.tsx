@@ -1,4 +1,4 @@
-import type { CSSStyles, FoursquareVenue, FoursquareCheckin, FoursquareVenueWithCheckins } from './App.types'
+import type { CSSStyles, FoursquareVenue, FoursquareCheckin, FoursquareVenueWithCheckins } from './index.types'
 import type { LatLngExpression } from 'leaflet';
 
 import * as React from 'react';
@@ -17,12 +17,13 @@ type Props = {
   token: string,
   limit? : number,
   range?: [number, number],
-  origin: LatLngExpression,
+  lat: number,
+  lng: number,
   zoom?: number,
   styles: CSSStyles
 }
 
-const App = ({ token, limit, range, origin, zoom = 13, styles }: Props) => {
+const App = ({ token, limit, range, lat, lng, zoom = 13, styles }: Props) => {
   const [apiToken] = useState(token ?? null);
   const [timeRange] = useState(range ?? getPastMonth())
   const [venues, setVenues] = useState(new Map<string, FoursquareVenue>())
@@ -74,7 +75,7 @@ const App = ({ token, limit, range, origin, zoom = 13, styles }: Props) => {
         venues={venues}
         selectedVenueWithCheckins={activeVenueWithCheckins}
         onVenueSelected={onVenueSelected}
-        origin={origin}
+        origin={[lat, lng] as LatLngExpression}
         zoom={zoom}
         styles={styles}
       />

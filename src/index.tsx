@@ -1,4 +1,3 @@
-import type { LatLngExpression } from 'leaflet';
 import * as React from 'react'
 import { createRoot } from 'react-dom/client';
 import './index.css'
@@ -12,7 +11,8 @@ import App from "./App";
 
 const DEFAULTS = {  
   token: 'FLVROYFL0YF1GXJK1GJHUM2HYIG4MG5IULV50KQUNZB2WBTT',
-  origin: [37.553050, -122.319090] as LatLngExpression,
+  lat: 37.553050,
+  lng: -122.319090,
   zoom: 13,
   styles: { 
     width: 'inherit',
