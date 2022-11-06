@@ -14,7 +14,6 @@
     "prettier:fix": "npm run prettier -- --write"
   },
   "dependencies": {
-    "@acab/reset.css": "^0.5.3",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fontsource/roboto": "^4.5.8",

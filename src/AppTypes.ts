@@ -5,9 +5,9 @@ export type QueryParamsType = Record<string, string>;
  * @see ./src/config.json.default
  */
 export type AppConfig = {
-  token: string;
-  latlng: number[];
-  zoom: number;
+  token?: string;
+  latlng?: number[];
+  zoom?: number;
 };
 
 /**
