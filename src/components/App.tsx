@@ -2,9 +2,15 @@ import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 
 import AppMapper from './AppMapper';
-import type { AppConfig, QueryParamsType } from './AppTypes';
+import type {
+  AppConfig,
+  AppConfigKey,
+  AppConfigValue,
+  QueryParamsType
+} from './AppTypes';
 
-import * as config from './config.json';
+// This might be fetch'ed
+import * as config from '../config.json';
 
 // TODO: Local Storage
 //   * token
@@ -24,7 +30,7 @@ const App = ({ queryParams }: { queryParams: QueryParamsType }) => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const updateConfig = useCallback(
-    (key: string, value: string) => {
+    (key: AppConfigKey, value: AppConfigValue) => {
       setAppState((prevState) => {
         return {
           ...prevState,
@@ -34,6 +40,7 @@ const App = ({ queryParams }: { queryParams: QueryParamsType }) => {
           }
         };
       });
+      return;
     },
     [config]
   );

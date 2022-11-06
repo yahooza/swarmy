@@ -9,8 +9,8 @@ import type {
   AppConfig
 } from './AppTypes';
 
-import Header from './components/Header';
-import Mapped from './components/Mapped';
+import Header from './Header';
+import Mapped from './Mapped';
 
 const TIME_MILLESECONDS_IN_1_SECOND = 1000;
 const FETCH_LIMIT = 250;

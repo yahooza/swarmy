@@ -4,10 +4,18 @@ export type QueryParamsType = Record<string, string>;
 /**
  * @see ./src/config.json.default
  */
+export enum AppConfigKey {
+  Token = 'token',
+  Latlng = 'latlng',
+  Zoom = 'zoom'
+}
+
+export type AppConfigValue = string | number | boolean | Array<number>;
+
 export type AppConfig = {
-  token?: string;
-  latlng?: number[];
-  zoom?: number;
+  [AppConfigKey.Token]?: string;
+  [AppConfigKey.Latlng]?: number[];
+  [AppConfigKey.Zoom]?: number;
 };
 
 /**

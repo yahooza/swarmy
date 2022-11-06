@@ -1,7 +1,7 @@
 import type { LatLngExpression } from 'leaflet';
 import * as React from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
-import type { FoursquareVenue, FoursquareVenueWithCheckins } from '../AppTypes';
+import type { FoursquareVenue, FoursquareVenueWithCheckins } from './AppTypes';
 import MappedPoppedUp from './MappedPoppedUp';
 import MappedMarkers from './MappedMarkers';
 

@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 // import SearchIcon from '@mui/icons-material/Search';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import type { FoursquareVenue } from '../AppTypes';
+import type { FoursquareVenue } from './AppTypes';
 
 type Props = {
   venues: Map<string, FoursquareVenue> | null | undefined;
