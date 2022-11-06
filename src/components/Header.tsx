@@ -1,51 +1,88 @@
 import * as React from 'react';
-import {AppBar, Box, Toolbar, Typography, Autocomplete, ListItem, TextField} from '@mui/material';
-import type { FoursquareVenue } from '../App.types'
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Autocomplete,
+  TextField
+} from '@mui/material';
+// import SearchIcon from '@mui/icons-material/Search';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import type { FoursquareVenue } from '../index.types';
 
 type Props = {
-  venues: Map<string, FoursquareVenue> | null | undefined,
-  onVenueSelected: (venueId: string) => void
-}
+  venues: Map<string, FoursquareVenue> | null | undefined;
+  activeVenue: FoursquareVenue | null | undefined;
+  onVenueSelected: (venueId: string) => void;
+};
 
-const Header = ({ venues, onVenueSelected }: Props) => {
+const Header = ({ venues, activeVenue, onVenueSelected }: Props) => {
   return (
-    <AppBar enableColorOnDark color="transparent" position="fixed">
-      <Toolbar>
-        <Typography
-          variant="h6"
-          noWrap
-          component="div"
-          sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-        >
-          4MAPS
-        </Typography>
+    <AppBar
+      enableColorOnDark
+      color="transparent"
+      position="fixed"
+      sx={{ width: '40%' }}
+    >
+      <Toolbar
+        sx={{
+          gap: 1
+        }}
+      >
         <Autocomplete
           id="4maps-search"
           blurOnSelect
           clearOnEscape
           isOptionEqualToValue={(option, value) => option.id === value.id}
-          onChange={(event: any, venue: any) => {
-            onVenueSelected(venue.id);
+          onChange={(
+            _: React.ChangeEvent<HTMLInputElement>,
+            venue: FoursquareVenue
+          ) => {
+            onVenueSelected(venue?.id ?? null);
             return;
           }}
-          options={Array.from(venues.values()).map(item => {
-            return {
-              id: item.id,
-              label: item.name,
-              address: item.location.formattedAddress
-            }
-          })}
-          getOptionLabel={option => option.label + ': ' +  option.address}
+          options={Array.from(venues.values())}
+          value={activeVenue ?? null}
+          getOptionLabel={(option: FoursquareVenue) =>
+            [option.name, option.location.formattedAddress].join(', ')
+          }
           renderInput={(params) => {
-            return (<TextField {...params} label="Venues"  />)
+            return (
+              <TextField
+                {...params}
+                fullWidth
+                size="small"
+                /*
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }} 
+                */
+              />
+            );
           }}
           sx={{
-            width: '40%'
+            flexGrow: 1
           }}
         />
+        <Button
+          color="primary"
+          size="large"
+          variant="outlined"
+          aria-label="Settings"
+          sx={{
+            paddingX: 1,
+            minWidth: 'initial'
+          }}
+        >
+          <SettingsOutlinedIcon />
+        </Button>
       </Toolbar>
     </AppBar>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

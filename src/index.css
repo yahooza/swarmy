@@ -1,13 +1,38 @@
+/**
+ * @see https://blog.jamie.holdings/2022/05/15/dark-mode-for/ 
+ */
+:root {
+  --leaflet-tile-filter: brightness(0.6) invert(1) contrast(3)
+    hue-rotate(200deg) saturate(0.3) brightness(0.7);
+}
+
+@media (prefers-color-scheme: dark) {
+  .leaflet-tile {
+    filter: var(--leaflet-tile-filter, none);
+  }
+
+  .leaflet-container {
+    background: #333;
+  }
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
 body {
-  background: #333;
+  background: #111;
   margin: 0;
   padding: 0;
   color: #fff;
   overflow: hidden;
+  width: inherit;
+  height: inherit;
 }
 
 .app-container {
-  width:100vw;
-  height:100vw;
-  border:1px solid #ccc;
+  width: 100%;
+  height: 100%;
+  border: 1px solid transparent;
 }
