@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Popup } from 'react-leaflet';
 import { fromUnixTime, formatISO, format } from 'date-fns';
-import type { FoursquareVenueWithCheckins } from '../index.types';
+import type { FoursquareVenueWithCheckins } from '../AppTypes';
 
 import { Card, CardHeader, CardContent, List, ListItem } from '@mui/material';
 

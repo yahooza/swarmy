@@ -8,12 +8,6 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import App from './App';
 
-// TODO: query string parsing
-//   `const params = new URLSearchParams(window.location.search);`
-
-// TODO: Local Storage
-//   * token
-
 const app = document.getElementById('app');
 const root = createRoot(app);
 root.render(

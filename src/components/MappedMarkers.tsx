@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Marker } from 'react-leaflet';
-import type { FoursquareVenue } from '../index.types';
+import type { FoursquareVenue } from '../AppTypes';
 
 type Props = {
   venues: Map<string, FoursquareVenue>;

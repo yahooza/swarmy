@@ -2,12 +2,12 @@ import type { LatLngExpression } from 'leaflet';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import type {
-  FetchParams,
+  FetchState,
   FoursquareVenue,
   FoursquareCheckin,
   FoursquareVenueWithCheckins,
   AppConfig
-} from './index.types';
+} from './AppTypes';
 
 import Header from './components/Header';
 import Mapped from './components/Mapped';
@@ -16,7 +16,7 @@ const TIME_MILLESECONDS_IN_1_SECOND = 1000;
 const FETCH_LIMIT = 250;
 
 const AppMapper = ({ token, latlng, zoom }: AppConfig) => {
-  const [fetchState, setFetchState] = useState<FetchParams>({
+  const [fetchState, setFetchState] = useState<FetchState>({
     hasMore: true,
     oldestCheckinTimestamp: Math.floor(
       new Date().getTime() / TIME_MILLESECONDS_IN_1_SECOND

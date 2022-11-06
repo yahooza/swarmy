@@ -1,17 +1,23 @@
 // The query string parsed into a URLSearchParams object
 export type QueryParamsType = Record<string, string>;
 
+/**
+ * @see ./src/config.json.default
+ */
 export type AppConfig = {
   token: string;
   latlng: number[];
   zoom: number;
 };
 
-export type FetchParams = {
+/**
+ * Api Fetcher
+ */
+export type FetchState = {
   hasMore: boolean;
   newestCheckinTimestamp?: number;
   oldestCheckinTimestamp?: number;
-  urlSearchParams: Record<string, string>;
+  urlSearchParams: QueryParamsType;
 };
 
 export type FoursquareVenue = {
