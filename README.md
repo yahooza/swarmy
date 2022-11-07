@@ -11,6 +11,13 @@ Fourmaps: updated with modern JavaScript
 - Checkins: [https://developer.foursquare.com/reference/checkins](https://developer.foursquare.com/reference/checkins)
 - Venues: [https://developer.foursquare.com/reference/venues](https://developer.foursquare.com/reference/venues)
 
-### Slideshow
+### 3rd partie libs
 
-- HTML + CSS Slide viewer [https://codepen.io/prathkum/pen/bGBOzXj](https://codepen.io/prathkum/pen/bGBOzXj)
+- HTML + CSS Slide Slideshow [https://codepen.io/prathkum/pen/bGBOzXj](https://codepen.io/prathkum/pen/bGBOzXj)
+- Multi-Snackbars! [https://notistack.com/](https://notistack.com/)
+
+### Options
+
+- Token (validate & remove)
+- Reset button
+- Reload button

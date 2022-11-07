@@ -1,24 +1,32 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
+import { useSnackbar } from 'notistack';
 
+// TODO: This might be fetch'ed
+import * as config from '../config.json';
 import AppMapper from './AppMapper';
 import type {
   AppConfig,
   AppConfigKey,
   AppConfigValue,
-  QueryParamsType
+  AppMessageCallback,
+  AppConfigUpdateCallback,
+  AppMessage,
+  QueryParams
 } from './AppTypes';
-
-// This might be fetch'ed
-import * as config from '../config.json';
+import {
+  MILLISECONDS_IN_1_SECOND,
+  SECONDS_TO_DISPLAY_ERROR_MSG
+} from './AppConstants';
+import { Button } from '@mui/material';
 
 // TODO: Local Storage
 //   * token
-
-const App = ({ queryParams }: { queryParams: QueryParamsType }) => {
+const App = ({ queryParams }: { queryParams?: QueryParams }) => {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [appState, setAppState] = useState<{
     config: AppConfig;
-    queryParams: QueryParamsType;
+    queryParams: QueryParams;
   }>({
     config: undefined,
     queryParams: undefined
@@ -29,7 +37,7 @@ const App = ({ queryParams }: { queryParams: QueryParamsType }) => {
   }, [config, queryParams]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const updateConfig = useCallback(
+  const onConfigUpdate: AppConfigUpdateCallback = useCallback(
     (key: AppConfigKey, value: AppConfigValue) => {
       setAppState((prevState) => {
         return {
@@ -45,10 +53,45 @@ const App = ({ queryParams }: { queryParams: QueryParamsType }) => {
     [config]
   );
 
+  /**
+   * Send a Toast message to the Viewer
+   * @param { message, type }
+   * @returns
+   */
+  const onMessage: AppMessageCallback = useCallback(
+    ({ message, type }: { message: string; type: AppMessage }) => {
+      switch (type) {
+        case 'error':
+        case 'warning':
+          enqueueSnackbar(`Oops: ${message}`, {
+            variant: type,
+            autoHideDuration:
+              SECONDS_TO_DISPLAY_ERROR_MSG * MILLISECONDS_IN_1_SECOND,
+            action: (snackbarId) => (
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => closeSnackbar(snackbarId)}
+              >
+                Dismiss
+              </Button>
+            )
+          });
+          return;
+        default:
+          enqueueSnackbar(`${message}`, {
+            variant: 'info'
+          });
+          return;
+      }
+    },
+    []
+  );
+
   if (!appState.config) {
     return null;
   }
-  return <AppMapper {...appState.config} />;
+  return <AppMapper {...appState.config} onMessage={onMessage} />;
 };
 
 export default App;

@@ -1,6 +1,8 @@
 import type { LatLngExpression } from 'leaflet';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { FETCH_LIMIT, MILLISECONDS_IN_1_SECOND } from './AppConstants';
+
 import type {
   FetchState,
   FoursquareVenue,
@@ -12,14 +14,11 @@ import type {
 import Header from './Header';
 import Mapped from './Mapped';
 
-const TIME_MILLESECONDS_IN_1_SECOND = 1000;
-const FETCH_LIMIT = 250;
-
-const AppMapper = ({ token, latlng, zoom }: AppConfig) => {
+const AppMapper = ({ token, latlng, zoom, onMessage }: AppConfig) => {
   const [fetchState, setFetchState] = useState<FetchState>({
     hasMore: true,
     oldestCheckinTimestamp: Math.floor(
-      new Date().getTime() / TIME_MILLESECONDS_IN_1_SECOND
+      new Date().getTime() / MILLISECONDS_IN_1_SECOND
     ),
     urlSearchParams: {
       v: '20130101',
@@ -44,6 +43,7 @@ const AppMapper = ({ token, latlng, zoom }: AppConfig) => {
     });
     setVenues(new Map([...venues]));
     setCheckins(checkins.concat(newCheckins));
+    onMessage({ message: `Fetched ${newCheckins.length} Checkins` });
     return;
   };
 
@@ -81,9 +81,11 @@ const AppMapper = ({ token, latlng, zoom }: AppConfig) => {
         });
       })
       .catch((exception) => {
-        // eslint-disable-next-line no-console
-        console.error(exception);
-        // TODO: Send Toast
+        onMessage({
+          message: exception.message,
+          type: 'error'
+        });
+        return;
       });
   };
 
@@ -108,12 +110,13 @@ const AppMapper = ({ token, latlng, zoom }: AppConfig) => {
   }, []);
 
   useEffect(() => {
-    if (!fetchState.hasMore) {
+    if (fetchState.hasMore === false) {
       return;
     }
     fetchCheckins({
       beforeTimestamp: fetchState.oldestCheckinTimestamp
     });
+    return;
   }, [fetchState.oldestCheckinTimestamp]);
 
   /**
@@ -142,6 +145,7 @@ const AppMapper = ({ token, latlng, zoom }: AppConfig) => {
         venues={venues}
         activeVenue={activeVenueWithCheckins?.venue}
         onVenueSelected={onVenueSelected}
+        checkins={checkins}
       />
       <Mapped
         venues={venues}

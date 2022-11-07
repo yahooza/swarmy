@@ -1,5 +1,14 @@
 // The query string parsed into a URLSearchParams object
-export type QueryParamsType = Record<string, string>;
+export type QueryParams = Record<string, string>;
+
+export type AppMessage = 'error' | 'warning' | null | undefined;
+export type AppMessageCallback = ({
+  message,
+  type
+}: {
+  message: string;
+  type?: AppMessage;
+}) => void;
 
 /**
  * @see ./src/config.json.default
@@ -7,16 +16,26 @@ export type QueryParamsType = Record<string, string>;
 export enum AppConfigKey {
   Token = 'token',
   Latlng = 'latlng',
-  Zoom = 'zoom'
+  Zoom = 'zoom',
+  onMessage = 'onMessage'
 }
-
 export type AppConfigValue = string | number | boolean | Array<number>;
-
 export type AppConfig = {
   [AppConfigKey.Token]?: string;
   [AppConfigKey.Latlng]?: number[];
   [AppConfigKey.Zoom]?: number;
+  [AppConfigKey.onMessage]?: AppMessageCallback;
 };
+
+export type AppParams = AppConfig & AppMessageCallback;
+
+/**
+ * When the User wants to update the Config
+ */
+export type AppConfigUpdateCallback = (
+  key: AppConfigKey,
+  value: AppConfigValue
+) => void;
 
 /**
  * Api Fetcher
@@ -25,7 +44,7 @@ export type FetchState = {
   hasMore: boolean;
   newestCheckinTimestamp?: number;
   oldestCheckinTimestamp?: number;
-  urlSearchParams: QueryParamsType;
+  urlSearchParams: QueryParams;
 };
 
 export type FoursquareVenue = {

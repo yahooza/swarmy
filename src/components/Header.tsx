@@ -1,34 +1,60 @@
 import * as React from 'react';
+import { fromUnixTime, format } from 'date-fns';
 import {
   AppBar,
-  Toolbar,
   Button,
   Autocomplete,
-  TextField
+  TextField,
+  Toolbar
 } from '@mui/material';
 // import SearchIcon from '@mui/icons-material/Search';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import type { FoursquareVenue } from './AppTypes';
+import type { FoursquareCheckin, FoursquareVenue } from './AppTypes';
+import { HUMAN_READABLE_DATE_FORMAT, ZERO } from './AppConstants';
+import Metric from './Metric';
 
-type Props = {
+const Header = ({
+  venues,
+  activeVenue,
+  onVenueSelected,
+  checkins
+}: {
   venues: Map<string, FoursquareVenue> | null | undefined;
   activeVenue: FoursquareVenue | null | undefined;
   onVenueSelected: (venueId: string) => void;
-};
+  checkins: FoursquareCheckin[];
+}) => {
+  const first = [...checkins].pop();
 
-const Header = ({ venues, activeVenue, onVenueSelected }: Props) => {
   return (
     <AppBar
       enableColorOnDark
       color="transparent"
       position="fixed"
-      sx={{ width: '40%' }}
+      sx={{ width: '70%' }}
     >
       <Toolbar
         sx={{
-          gap: 1
+          gap: 4
         }}
       >
+        <Metric
+          name="Since"
+          value={
+            first && first.createdAt
+              ? format(
+                  fromUnixTime(first.createdAt),
+                  HUMAN_READABLE_DATE_FORMAT
+                )
+              : null
+          }
+          size="large"
+        />
+        <Metric
+          name="Checkins"
+          value={(checkins?.length ?? ZERO).toLocaleString()}
+        />
+        <Metric name="Venues" value={(venues?.size ?? ZERO).toLocaleString()} />
         <Autocomplete
           id="4maps-search"
           blurOnSelect
@@ -71,10 +97,9 @@ const Header = ({ venues, activeVenue, onVenueSelected }: Props) => {
         <Button
           color="primary"
           size="large"
-          variant="outlined"
+          variant="contained"
           aria-label="Settings"
           sx={{
-            paddingX: 1,
             minWidth: 'initial'
           }}
         >
