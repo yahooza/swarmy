@@ -19,10 +19,6 @@ root.render(
     maxSnack={5}
     autoHideDuration={1500}
   >
-    <App
-      queryParams={Object.fromEntries(
-        new URLSearchParams(window.location.search)
-      )}
-    />
+    <App />
   </SnackbarProvider>
 );

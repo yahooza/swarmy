@@ -1,6 +1,31 @@
-// The query string parsed into a URLSearchParams object
+// Any query string parsed into a URLSearchParams object
 export type QueryParams = Record<string, string>;
 
+/**
+ * Config (both User & App)
+ * @see ./src/config.json.default (for the app config)
+ */
+export enum ConfigKey {
+  Token = 'token',
+  Latlng = 'latlng',
+  Zoom = 'zoom'
+}
+
+export interface AppConfig {
+  [ConfigKey.Latlng]?: Array<number>;
+  [ConfigKey.Zoom]?: number;
+}
+
+export interface UserConfig {
+  [ConfigKey.Token]?: string | null;
+}
+
+// when the User wants to update the Config
+export type UserConfigUpdateCallback = (updatedUserConfig: UserConfig) => void;
+
+/**
+ * Messages: Toasts!
+ */
 export type AppMessage = 'error' | 'warning' | null | undefined;
 export type AppMessageCallback = ({
   message,
@@ -11,43 +36,19 @@ export type AppMessageCallback = ({
 }) => void;
 
 /**
- * @see ./src/config.json.default
+ * API Fetch state
  */
-export enum AppConfigKey {
-  Token = 'token',
-  Latlng = 'latlng',
-  Zoom = 'zoom',
-  onMessage = 'onMessage'
-}
-export type AppConfigValue = string | number | boolean | Array<number>;
-export type AppConfig = {
-  [AppConfigKey.Token]?: string;
-  [AppConfigKey.Latlng]?: number[];
-  [AppConfigKey.Zoom]?: number;
-  [AppConfigKey.onMessage]?: AppMessageCallback;
-};
-
-export type AppParams = AppConfig & AppMessageCallback;
-
-/**
- * When the User wants to update the Config
- */
-export type AppConfigUpdateCallback = (
-  key: AppConfigKey,
-  value: AppConfigValue
-) => void;
-
-/**
- * Api Fetcher
- */
-export type FetchState = {
-  hasMore: boolean;
+export interface FetchState {
+  hasMorePastCheckins: boolean;
   newestCheckinTimestamp?: number;
   oldestCheckinTimestamp?: number;
   urlSearchParams: QueryParams;
-};
+}
 
-export type FoursquareVenue = {
+/**
+ * Foursquare API types
+ */
+export interface FoursquareVenue {
   id: string;
   name: string;
   location: {
@@ -57,9 +58,9 @@ export type FoursquareVenue = {
     postalCode: string;
     country: string;
   };
-};
+}
 
-export type FoursquareCheckin = {
+export interface FoursquareCheckin {
   id: string;
   createdAt: number;
   photos?: {
@@ -73,9 +74,9 @@ export type FoursquareCheckin = {
     ];
   };
   venue: FoursquareVenue;
-};
+}
 
-export type FoursquareVenueWithCheckins = {
+export interface FoursquareVenueWithCheckins {
   venue: FoursquareVenue;
   checkins: FoursquareCheckin[];
-};
+}

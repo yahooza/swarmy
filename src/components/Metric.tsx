@@ -12,7 +12,7 @@ const Metric = ({
 }: {
   name: string;
   value?: string;
-  size?: string;
+  size?: 'large' | 'default';
 }) => {
   return (
     <Box
@@ -37,7 +37,7 @@ const Metric = ({
       <Typography
         variant="subtitle1"
         sx={{
-          fontSize: '150%'
+          fontSize: '165%'
         }}
         noWrap
       >

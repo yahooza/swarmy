@@ -5,39 +5,43 @@ import {
   Button,
   Autocomplete,
   TextField,
-  Toolbar
+  Toolbar,
+  InputAdornment
 } from '@mui/material';
-// import SearchIcon from '@mui/icons-material/Search';
+import MapTwoToneIcon from '@mui/icons-material/MapTwoTone';
+import SearchIcon from '@mui/icons-material/Search';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import type { FoursquareCheckin, FoursquareVenue } from './AppTypes';
 import { HUMAN_READABLE_DATE_FORMAT, ZERO } from './AppConstants';
 import Metric from './Metric';
 
 const Header = ({
+  checkins,
   venues,
   activeVenue,
   onVenueSelected,
-  checkins
+  onToggleSettings
 }: {
+  checkins: FoursquareCheckin[];
   venues: Map<string, FoursquareVenue> | null | undefined;
   activeVenue: FoursquareVenue | null | undefined;
   onVenueSelected: (venueId: string) => void;
-  checkins: FoursquareCheckin[];
+  onToggleSettings: () => void;
 }) => {
   const first = [...checkins].pop();
 
   return (
     <AppBar
       enableColorOnDark
-      color="transparent"
       position="fixed"
-      sx={{ width: '70%' }}
+      sx={{ backgroundColor: 'rgba(0, 0, 0, 0.35)' }}
     >
       <Toolbar
         sx={{
-          gap: 4
+          gap: 6
         }}
       >
+        <MapTwoToneIcon fontSize="large" titleAccess="Four Maps" />
         <Metric
           name="Since"
           value={
@@ -76,32 +80,43 @@ const Header = ({
             return (
               <TextField
                 {...params}
-                fullWidth
                 size="small"
-                /*
+                fullWidth
+                placeholder="Search venues"
+                inputProps={{
+                  ...params.inputProps,
+                  sx: {
+                    color: '#fff'
+                  }
+                }}
                 InputProps={{
+                  ...params.InputProps,
                   startAdornment: (
                     <InputAdornment position="start">
                       <SearchIcon />
                     </InputAdornment>
-                  ),
-                }} 
-                */
+                  )
+                }}
               />
             );
           }}
           sx={{
-            flexGrow: 1
+            backgroundColor: 'rgba(255, 255, 255, 0.15)',
+            color: '#fff',
+            flexGrow: 1,
+            borderRadius: '4px',
+            overflow: 'hidden'
           }}
         />
         <Button
-          color="primary"
+          color="secondary"
           size="large"
           variant="contained"
           aria-label="Settings"
           sx={{
             minWidth: 'initial'
           }}
+          onClick={onToggleSettings}
         >
           <SettingsOutlinedIcon />
         </Button>

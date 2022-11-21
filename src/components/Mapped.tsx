@@ -5,21 +5,19 @@ import type { FoursquareVenue, FoursquareVenueWithCheckins } from './AppTypes';
 import MappedPoppedUp from './MappedPoppedUp';
 import MappedMarkers from './MappedMarkers';
 
-type Props = {
-  venues: Map<string, FoursquareVenue>;
-  selectedVenueWithCheckins: FoursquareVenueWithCheckins | null | undefined;
-  onVenueSelected: (venueId: string | null) => void;
-  origin: LatLngExpression;
-  zoom: number;
-};
-
 const Mapped = ({
   venues,
   selectedVenueWithCheckins,
   onVenueSelected,
   origin,
   zoom
-}: Props) => {
+}: {
+  venues: Map<string, FoursquareVenue>;
+  selectedVenueWithCheckins: FoursquareVenueWithCheckins | null | undefined;
+  onVenueSelected: (venueId: string | null) => void;
+  origin: LatLngExpression;
+  zoom: number;
+}) => {
   return (
     <MapContainer
       style={{
@@ -33,7 +31,10 @@ const Mapped = ({
     >
       <MappedMarkers venues={venues} onVenueSelected={onVenueSelected} />
       {selectedVenueWithCheckins && (
-        <MappedPoppedUp selectedVenueWithCheckins={selectedVenueWithCheckins} />
+        <MappedPoppedUp
+          selectedVenueWithCheckins={selectedVenueWithCheckins}
+          onVenueSelected={onVenueSelected}
+        />
       )}
       <TileLayer
         // eslint-disable-next-line max-len

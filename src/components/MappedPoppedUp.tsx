@@ -1,15 +1,24 @@
 import * as React from 'react';
-import { Popup } from 'react-leaflet';
+import { Popup, useMapEvents } from 'react-leaflet';
 import { fromUnixTime, formatISO, format } from 'date-fns';
 import type { FoursquareVenueWithCheckins } from './AppTypes';
 
 import { Card, CardHeader, CardContent, List, ListItem } from '@mui/material';
 
-type Props = {
+const MappedPoppedUp = ({
+  selectedVenueWithCheckins,
+  onVenueSelected
+}: {
   selectedVenueWithCheckins: FoursquareVenueWithCheckins;
-};
+  onVenueSelected: (venueId: string | null) => void;
+}) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const map = useMapEvents({
+    popupclose() {
+      onVenueSelected(null);
+    }
+  });
 
-const MappedPoppedUp = ({ selectedVenueWithCheckins }: Props) => {
   /*
   // Photos
   const photos = React.useMemo(() => {
@@ -18,6 +27,7 @@ const MappedPoppedUp = ({ selectedVenueWithCheckins }: Props) => {
       .filter(item => item !== null)
   }, [selectedVenueWithCheckins])
   */
+
   return (
     <Popup
       position={[

@@ -1,20 +1,21 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 import { useSnackbar } from 'notistack';
 
 // TODO: This might be fetch'ed
-import * as config from '../config.json';
-import AppMapper from './AppMapper';
-import type {
-  AppConfig,
-  AppConfigKey,
-  AppConfigValue,
-  AppMessageCallback,
-  AppConfigUpdateCallback,
-  AppMessage,
-  QueryParams
-} from './AppTypes';
+import * as AppConfig from '../config.json';
+
 import {
+  UserConfig,
+  AppMessageCallback,
+  UserConfigUpdateCallback,
+  AppMessage,
+  ConfigKey
+} from './AppTypes';
+import AppMapper from './AppMapper';
+import {
+  LOCALSTORAGE_USER_CONFIG,
   MILLISECONDS_IN_1_SECOND,
   SECONDS_TO_DISPLAY_ERROR_MSG
 } from './AppConstants';
@@ -22,35 +23,29 @@ import { Button } from '@mui/material';
 
 // TODO: Local Storage
 //   * token
-const App = ({ queryParams }: { queryParams?: QueryParams }) => {
+const App = () => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const [appState, setAppState] = useState<{
-    config: AppConfig;
-    queryParams: QueryParams;
-  }>({
-    config: undefined,
-    queryParams: undefined
-  });
+  const [userConfig, setUserConfig] = useLocalStorage<UserConfig>(
+    LOCALSTORAGE_USER_CONFIG,
+    {
+      [ConfigKey.Token]: null
+    }
+  );
 
-  useEffect(() => {
-    setAppState({ config, queryParams });
-  }, [config, queryParams]);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onConfigUpdate: AppConfigUpdateCallback = useCallback(
-    (key: AppConfigKey, value: AppConfigValue) => {
-      setAppState((prevState) => {
+  /**
+   * For now, updates the API token
+   */
+  const onUserConfigUpdate: UserConfigUpdateCallback = useCallback(
+    (updatedUserConfig: UserConfig) => {
+      setUserConfig((prevState: UserConfig) => {
         return {
           ...prevState,
-          config: {
-            ...prevState.config,
-            [key]: value
-          }
+          ...updatedUserConfig
         };
       });
       return;
     },
-    [config]
+    []
   );
 
   /**
@@ -88,10 +83,14 @@ const App = ({ queryParams }: { queryParams?: QueryParams }) => {
     []
   );
 
-  if (!appState.config) {
-    return null;
-  }
-  return <AppMapper {...appState.config} onMessage={onMessage} />;
+  return (
+    <AppMapper
+      {...AppConfig}
+      token={userConfig[ConfigKey.Token]}
+      onMessage={onMessage}
+      onUserConfigUpdate={onUserConfigUpdate}
+    />
+  );
 };
 
 export default App;

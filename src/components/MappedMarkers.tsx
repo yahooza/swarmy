@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { Marker } from 'react-leaflet';
 import type { FoursquareVenue } from './AppTypes';
+import { INDEX_OF_VENUE, VALID_NUMBER_OF_VENUES } from './AppConstants';
 
 type Props = {
   venues: Map<string, FoursquareVenue>;
   onVenueSelected: (venueId: string | null) => void;
 };
-
-const VALID_NUMBER_OF_VENUES = 1;
-const INDEX_OF_VENUE = 1;
 
 const MappedMarkers = ({ venues, onVenueSelected }: Props) => {
   return (

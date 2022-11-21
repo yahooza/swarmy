@@ -20,7 +20,6 @@
     "default-case-last": "error",
     "dot-notation": "warn",
     "import-order/import-order": 2,
-    "indent": ["error", 2, { "SwitchCase": 1 }],
     "max-len": "warn",
     "no-await-in-loop": "error",
     "no-console": "error",
