@@ -15,9 +15,10 @@ import {
 } from './AppTypes';
 import AppMapper from './AppMapper';
 import {
-  LOCALSTORAGE_USER_CONFIG,
+  STORAGE_USER_CONFIG,
   MILLISECONDS_IN_1_SECOND,
-  SECONDS_TO_DISPLAY_ERROR_MSG
+  SECONDS_TO_DISPLAY_ERROR_MSG,
+  SECONDS_TO_DISPLAY_SUCCESS_MSG
 } from './AppConstants';
 import { Button } from '@mui/material';
 
@@ -26,7 +27,7 @@ import { Button } from '@mui/material';
 const App = () => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [userConfig, setUserConfig] = useLocalStorage<UserConfig>(
-    LOCALSTORAGE_USER_CONFIG,
+    STORAGE_USER_CONFIG,
     {
       [ConfigKey.Token]: null
     }
@@ -36,12 +37,16 @@ const App = () => {
    * For now, updates the API token
    */
   const onUserConfigUpdate: UserConfigUpdateCallback = useCallback(
-    (updatedUserConfig: UserConfig) => {
+    (updates: UserConfig) => {
       setUserConfig((prevState: UserConfig) => {
         return {
           ...prevState,
-          ...updatedUserConfig
+          ...updates
         };
+      });
+      onMessage({
+        message: 'Updated preferences successfully!',
+        type: 'success'
       });
       return;
     },
@@ -73,6 +78,13 @@ const App = () => {
             )
           });
           return;
+        case 'success':
+          enqueueSnackbar(`${message}`, {
+            variant: 'success',
+            autoHideDuration:
+              SECONDS_TO_DISPLAY_SUCCESS_MSG * MILLISECONDS_IN_1_SECOND
+          });
+          return;
         default:
           enqueueSnackbar(`${message}`, {
             variant: 'info'
@@ -85,8 +97,9 @@ const App = () => {
 
   return (
     <AppMapper
+      key={userConfig[ConfigKey.Token] ?? ''}
       {...AppConfig}
-      token={userConfig[ConfigKey.Token]}
+      token={userConfig[ConfigKey.Token] ?? undefined}
       onMessage={onMessage}
       onUserConfigUpdate={onUserConfigUpdate}
     />

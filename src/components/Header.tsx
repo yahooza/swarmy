@@ -11,7 +11,11 @@ import {
 import MapTwoToneIcon from '@mui/icons-material/MapTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import type { FoursquareCheckin, FoursquareVenue } from './AppTypes';
+import type {
+  FoursquareCheckin,
+  FoursquareVenue,
+  onModalToggleCallback
+} from './AppTypes';
 import { HUMAN_READABLE_DATE_FORMAT, ZERO } from './AppConstants';
 import Metric from './Metric';
 
@@ -26,7 +30,7 @@ const Header = ({
   venues: Map<string, FoursquareVenue> | null | undefined;
   activeVenue: FoursquareVenue | null | undefined;
   onVenueSelected: (venueId: string) => void;
-  onToggleSettings: () => void;
+  onToggleSettings: onModalToggleCallback;
 }) => {
   const first = [...checkins].pop();
 
@@ -116,7 +120,7 @@ const Header = ({
           sx={{
             minWidth: 'initial'
           }}
-          onClick={onToggleSettings}
+          onClick={() => onToggleSettings()}
         >
           <SettingsOutlinedIcon />
         </Button>

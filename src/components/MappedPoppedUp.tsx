@@ -6,10 +6,10 @@ import type { FoursquareVenueWithCheckins } from './AppTypes';
 import { Card, CardHeader, CardContent, List, ListItem } from '@mui/material';
 
 const MappedPoppedUp = ({
-  selectedVenueWithCheckins,
+  activeVenueWithCheckins,
   onVenueSelected
 }: {
-  selectedVenueWithCheckins: FoursquareVenueWithCheckins;
+  activeVenueWithCheckins: FoursquareVenueWithCheckins;
   onVenueSelected: (venueId: string | null) => void;
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,17 +22,17 @@ const MappedPoppedUp = ({
   /*
   // Photos
   const photos = React.useMemo(() => {
-    return selectedVenueWithCheckins.checkins
+    return activeVenueWithCheckins.checkins
       .map(checkin => checkin.photos?.items ?? null)
       .filter(item => item !== null)
-  }, [selectedVenueWithCheckins])
+  }, [activeVenueWithCheckins])
   */
 
   return (
     <Popup
       position={[
-        selectedVenueWithCheckins.venue.location.lat,
-        selectedVenueWithCheckins.venue.location.lng
+        activeVenueWithCheckins.venue.location.lat,
+        activeVenueWithCheckins.venue.location.lng
       ]}
       minWidth={300}
       maxHeight={500}
@@ -44,8 +44,8 @@ const MappedPoppedUp = ({
         }}
       >
         <CardHeader
-          title={selectedVenueWithCheckins.venue.name}
-          subheader={selectedVenueWithCheckins.venue.location.formattedAddress}
+          title={activeVenueWithCheckins.venue.name}
+          subheader={activeVenueWithCheckins.venue.location.formattedAddress}
           subheaderTypographyProps={{
             sx: {
               lineHeight: 'initial'
@@ -61,7 +61,7 @@ const MappedPoppedUp = ({
           }}
         >
           <List sx={{ width: '100%' }}>
-            {selectedVenueWithCheckins.checkins.map((checkin) => {
+            {activeVenueWithCheckins.checkins.map((checkin) => {
               const checkinTime = fromUnixTime(checkin.createdAt);
               return (
                 <ListItem

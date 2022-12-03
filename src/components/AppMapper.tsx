@@ -1,7 +1,7 @@
 import { Modal, Paper } from '@mui/material';
 import type { LatLngExpression } from 'leaflet';
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   FETCH_LIMIT,
   FETCH_OFFSET_IN_MILLISECONDS,
@@ -16,8 +16,10 @@ import type {
   AppConfig,
   AppMessageCallback,
   UserConfig,
-  UserConfigUpdateCallback
+  UserConfigUpdateCallback,
+  onModalToggleCallback
 } from './AppTypes';
+import { isValidApiToken } from './AppUtils';
 
 import Header from './Header';
 import Mapped from './Mapped';
@@ -38,22 +40,32 @@ const AppMapper = ({
     hasMorePastCheckins: true,
     oldestCheckinTimestamp: Math.floor(
       new Date().getTime() / MILLISECONDS_IN_1_SECOND
-    ),
-    urlSearchParams: {
+    )
+  });
+
+  const fetchSearchParams = useMemo(() => {
+    return {
       v: '20130101',
       limit: FETCH_LIMIT.toString(),
       format: 'json',
       beforeTimestamp: null,
       oauth_token: token
-    }
-  });
+    };
+  }, [token]);
+
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
   const [venues, setVenues] = useState(new Map<string, FoursquareVenue>());
   const [checkins, setCheckins] = useState<FoursquareCheckin[] | null>([]);
   const [activeVenueWithCheckins, setActiveVenueWithCheckins] =
     useState<FoursquareVenueWithCheckins | null>(null);
 
-  const handleCheckins = (newCheckins: Array<FoursquareCheckin>): void => {
+  const hasValidApiToken = useMemo(() => isValidApiToken({ token }), [token]);
+
+  /**
+   * @param newCheckins Post-fetch callback to process checkins
+   * @returns {boolean}
+   */
+  const handleCheckins = (newCheckins: Array<FoursquareCheckin>): boolean => {
     newCheckins.forEach((checkin: FoursquareCheckin) => {
       const { venue } = checkin;
       if (venues.has(venue.id)) {
@@ -63,10 +75,15 @@ const AppMapper = ({
     });
     setVenues(new Map([...venues]));
     setCheckins(checkins.concat(newCheckins));
-    onMessage({ message: `Fetched ${newCheckins.length} Checkins` });
-    return;
+
+    return true;
   };
 
+  /**
+   * Get stuff the API
+   * @param beforeTimestamp
+   * @returns
+   */
   const fetchCheckins = async ({
     beforeTimestamp
   }: {
@@ -79,7 +96,7 @@ const AppMapper = ({
       [
         'https://api.foursquare.com/v2/users/self/checkins',
         new URLSearchParams({
-          ...fetchState.urlSearchParams,
+          ...fetchSearchParams,
           beforeTimestamp: beforeTimestamp.toString() ?? null
         })
       ].join('?')
@@ -94,7 +111,11 @@ const AppMapper = ({
         const hasMorePastCheckins = checkins.length < FETCH_LIMIT * 4;
         // const hasMorePastCheckins =
         //  newCheckins.length.toString() === fetchState.urlSearchParams.limit;
-        handleCheckins(newCheckins);
+        const handled = handleCheckins(newCheckins);
+        if (handled) {
+          onMessage({ message: `Fetched ${newCheckins.length} Checkins` });
+        }
+
         setFetchState((prevState) => {
           return {
             ...prevState,
@@ -139,7 +160,13 @@ const AppMapper = ({
     */
   }, []);
 
+  /**
+   * Fetches checkins from the API
+   */
   useEffect(() => {
+    if (!hasValidApiToken) {
+      return;
+    }
     if (fetchState.hasMorePastCheckins === false) {
       return;
     }
@@ -148,7 +175,7 @@ const AppMapper = ({
         fetchState.oldestCheckinTimestamp - FETCH_OFFSET_IN_MILLISECONDS
     });
     return;
-  }, [fetchState.oldestCheckinTimestamp]);
+  }, [hasValidApiToken, fetchState.oldestCheckinTimestamp]);
 
   /**
    * The user has selected a Venue
@@ -179,7 +206,11 @@ const AppMapper = ({
     return;
   };
 
-  const onToggleSettings = () => {
+  const onToggleSettings: onModalToggleCallback = (brute?: boolean) => {
+    if (brute) {
+      setSettingsOpen(brute);
+      return;
+    }
     setSettingsOpen(!settingsOpen);
     return;
   };
@@ -195,25 +226,18 @@ const AppMapper = ({
       />
       <Mapped
         venues={venues}
-        selectedVenueWithCheckins={activeVenueWithCheckins}
+        activeVenueWithCheckins={activeVenueWithCheckins}
         onVenueSelected={onVenueSelected}
         origin={latlng as LatLngExpression}
         zoom={zoom}
       />
-      <Modal
-        open={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
-        aria-labelledby="Settings"
-        aria-describedby="Preferences for this browser"
-      >
-        <Paper elevation={3}>
-          <Settings
-            token={token}
-            onToggleSettings={onToggleSettings}
-            onUserConfigUpdate={onUserConfigUpdate}
-          />
-        </Paper>
-      </Modal>
+      {(!hasValidApiToken || settingsOpen) && (
+        <Settings
+          token={token}
+          onToggleSettings={onToggleSettings}
+          onUserConfigUpdate={onUserConfigUpdate}
+        />
+      )}
     </>
   );
 };

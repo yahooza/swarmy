@@ -1,9 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
-import {
-  METRIC_SIZE_LARGE_MULTIPLIER,
-  METRIC_SIZE_OF_BOX
-} from './AppConstants';
+import { METRIC_SIZE_MAKE_IT_BIGGER, METRIC_SIZE_OF_BOX } from './AppConstants';
 
 const Metric = ({
   name,
@@ -19,7 +16,7 @@ const Metric = ({
       sx={{
         width:
           size === 'large'
-            ? METRIC_SIZE_OF_BOX * METRIC_SIZE_LARGE_MULTIPLIER
+            ? METRIC_SIZE_OF_BOX * METRIC_SIZE_MAKE_IT_BIGGER
             : METRIC_SIZE_OF_BOX
       }}
     >

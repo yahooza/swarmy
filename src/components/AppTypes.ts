@@ -1,6 +1,8 @@
 // Any query string parsed into a URLSearchParams object
 export type QueryParams = Record<string, string>;
 
+export type ApiToken = string | null | undefined;
+
 /**
  * Config (both User & App)
  * @see ./src/config.json.default (for the app config)
@@ -17,16 +19,18 @@ export interface AppConfig {
 }
 
 export interface UserConfig {
-  [ConfigKey.Token]?: string | null;
+  [ConfigKey.Token]?: string | undefined;
 }
 
 // when the User wants to update the Config
 export type UserConfigUpdateCallback = (updatedUserConfig: UserConfig) => void;
 
+export type onModalToggleCallback = (brute?: boolean) => void;
+
 /**
  * Messages: Toasts!
  */
-export type AppMessage = 'error' | 'warning' | null | undefined;
+export type AppMessage = 'error' | 'warning' | 'success' | null | undefined;
 export type AppMessageCallback = ({
   message,
   type
@@ -42,7 +46,6 @@ export interface FetchState {
   hasMorePastCheckins: boolean;
   newestCheckinTimestamp?: number;
   oldestCheckinTimestamp?: number;
-  urlSearchParams: QueryParams;
 }
 
 /**

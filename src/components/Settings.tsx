@@ -5,12 +5,22 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  FormHelperText,
   IconButton,
+  Modal,
+  Paper,
+  Stack,
   TextField
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { useCallback } from 'react';
-import { ConfigKey, UserConfigUpdateCallback } from './AppTypes';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import {
+  ConfigKey,
+  onModalToggleCallback,
+  UserConfigUpdateCallback
+} from './AppTypes';
+import { isValidApiToken } from './AppUtils';
+import { URL_4SQUARE_API_DOCS } from './AppConstants';
 
 const style = {
   position: 'absolute' as const,
@@ -27,20 +37,20 @@ const Settings = ({
   onToggleSettings,
   onUserConfigUpdate
 }: {
-  token?: string;
-  onToggleSettings: () => void;
+  token?: string | null;
+  onToggleSettings: onModalToggleCallback;
   onUserConfigUpdate: UserConfigUpdateCallback;
 }) => {
-  const onSave = useCallback(
-    (event: React.MouseEvent<HTMLInputElement>) => {
-      onUserConfigUpdate({
-        [ConfigKey.Token]: event.currentTarget.value
-      });
-    },
-    [onUserConfigUpdate]
-  );
+  const [localToken, setLocalToken] = useState<string | null>(token ?? null);
+  const tokenRef = useRef<HTMLInputElement>(null);
 
-  const onReset = useCallback(() => {
+  const onSave = useCallback(() => {
+    onUserConfigUpdate({
+      [ConfigKey.Token]: tokenRef?.current?.value
+    });
+  }, [onUserConfigUpdate]);
+
+  const onRemove = useCallback(() => {
     if (window.confirm(`Are you sure you want to delete this token?`)) {
       onUserConfigUpdate({
         [ConfigKey.Token]: null
@@ -48,33 +58,86 @@ const Settings = ({
     }
   }, [onUserConfigUpdate]);
 
+  const isSavable = useMemo(
+    () => isValidApiToken({ token: localToken }),
+    [localToken]
+  );
+
   return (
-    <Box sx={style}>
-      <Card sx={{ p: 1 }}>
-        <CardHeader title="Settings" />
-        <CardContent>
-          <TextField
-            label="Token"
-            variant="standard"
-            value={token}
-            sx={{
-              width: '100%'
-            }}
-          />
-        </CardContent>
-        <CardActions>
-          <Button variant="contained" onClick={onSave}>
-            Save
-          </Button>
-          <Button variant="outlined" onClick={onToggleSettings}>
-            Cancel
-          </Button>
-          <IconButton color="error" aria-label="delete" onClick={onReset}>
-            <DeleteIcon />
-          </IconButton>
-        </CardActions>
-      </Card>
-    </Box>
+    <Modal
+      open={true}
+      onClose={onToggleSettings}
+      aria-labelledby="Settings"
+      aria-describedby="Settings for this Map"
+    >
+      <Paper elevation={3}>
+        <Box sx={style}>
+          <Card sx={{ p: 1 }}>
+            <form onSubmit={onSave}>
+              <CardHeader
+                title="Settings"
+                // eslint-disable-next-line max-len
+                subheader={`To render your checkins, a valid API token is required`}
+              />
+              <CardContent>
+                <TextField
+                  autoComplete="off"
+                  label="Token"
+                  variant="standard"
+                  defaultValue={localToken ?? ''}
+                  inputRef={tokenRef}
+                  onChange={(
+                    event: React.ChangeEvent<HTMLInputElement>
+                  ): void =>
+                    setLocalToken((event.target as HTMLInputElement).value)
+                  }
+                  sx={{
+                    width: '100%'
+                  }}
+                />
+                <FormHelperText>
+                  Register a Foursquare API token{' '}
+                  <a href={URL_4SQUARE_API_DOCS} target="_blank">
+                    here
+                  </a>
+                  .
+                </FormHelperText>
+              </CardContent>
+              <CardActions
+                sx={{
+                  justifyContent: 'space-between'
+                }}
+              >
+                <Stack direction="row" alignItems="center" spacing={1.5}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={!isSavable}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => onToggleSettings}
+                    disabled={!token}
+                  >
+                    Cancel
+                  </Button>
+                </Stack>
+                <IconButton
+                  color="error"
+                  aria-label="delete"
+                  onClick={onRemove}
+                  disabled={!token}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </CardActions>
+            </form>
+          </Card>
+        </Box>
+      </Paper>
+    </Modal>
   );
 };
 

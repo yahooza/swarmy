@@ -7,13 +7,13 @@ import MappedMarkers from './MappedMarkers';
 
 const Mapped = ({
   venues,
-  selectedVenueWithCheckins,
+  activeVenueWithCheckins,
   onVenueSelected,
   origin,
   zoom
 }: {
   venues: Map<string, FoursquareVenue>;
-  selectedVenueWithCheckins: FoursquareVenueWithCheckins | null | undefined;
+  activeVenueWithCheckins: FoursquareVenueWithCheckins | null | undefined;
   onVenueSelected: (venueId: string | null) => void;
   origin: LatLngExpression;
   zoom: number;
@@ -30,9 +30,9 @@ const Mapped = ({
       scrollWheelZoom={false}
     >
       <MappedMarkers venues={venues} onVenueSelected={onVenueSelected} />
-      {selectedVenueWithCheckins && (
+      {activeVenueWithCheckins && (
         <MappedPoppedUp
-          selectedVenueWithCheckins={selectedVenueWithCheckins}
+          activeVenueWithCheckins={activeVenueWithCheckins}
           onVenueSelected={onVenueSelected}
         />
       )}
