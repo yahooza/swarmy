@@ -1,4 +1,3 @@
-import { Modal, Paper } from '@mui/material';
 import type { LatLngExpression } from 'leaflet';
 import * as React from 'react';
 import { useState, useEffect, useMemo } from 'react';
@@ -24,6 +23,8 @@ import { isValidApiToken } from './AppUtils';
 import Header from './Header';
 import Mapped from './Mapped';
 import Settings from './Settings';
+
+const IS_DEV_MODE = true;
 
 const AppMapper = ({
   token,
@@ -107,10 +108,12 @@ const AppMapper = ({
         if (!newCheckins) {
           return;
         }
-        // eslint-disable-next-line no-magic-numbers
-        const hasMorePastCheckins = checkins.length < FETCH_LIMIT * 4;
-        // const hasMorePastCheckins =
-        //  newCheckins.length.toString() === fetchState.urlSearchParams.limit;
+
+        const hasMorePastCheckins = IS_DEV_MODE
+          ? // eslint-disable-next-line no-magic-numbers
+            checkins.length < FETCH_LIMIT * 3
+          : newCheckins.length.toString() === fetchSearchParams.limit;
+
         const handled = handleCheckins(newCheckins);
         if (handled) {
           onMessage({ message: `Fetched ${newCheckins.length} Checkins` });

@@ -8,8 +8,8 @@ export const SECONDS_TO_DISPLAY_SUCCESS_MSG = 5;
 export const SECONDS_TO_DISPLAY_ERROR_MSG = 60;
 
 // Size of the boxes that display a number
-export const METRIC_SIZE_OF_BOX = 75;
-export const METRIC_SIZE_MAKE_IT_BIGGER = 2.25;
+export const METRIC_SIZE_OF_BOX = 100;
+export const METRIC_SIZE_MAKE_IT_BIGGER = 1.75;
 
 // # of venues that are necessary to render a list of Venues
 export const VALID_NUMBER_OF_VENUES = 1;
