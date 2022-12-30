@@ -1,8 +1,14 @@
 import React from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { SnackbarProvider } from 'notistack';
-import * as AppConfig from '../config.json';
 import Platform from './Platform';
+
+const AppConfig = {
+  environment: 'development',
+  // eslint-disable-next-line no-magic-numbers
+  latlng: [37.55305, -122.31909],
+  zoom: 15
+};
 
 const darkTheme = createTheme({
   palette: {
@@ -10,7 +16,6 @@ const darkTheme = createTheme({
   }
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const App = () => {
   return (
     <ThemeProvider theme={darkTheme}>

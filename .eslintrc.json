@@ -13,6 +13,9 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
+  "node": {
+    "__dirname": true
+  },
   "plugins": ["@typescript-eslint", "import-order"],
   "rules": {
     "arrow-spacing": "error",
