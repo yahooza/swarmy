@@ -1,6 +1,7 @@
 // Just Zero.
 export const ZERO = 0;
 
+export const API_TOKEN_NOT_VALID = 'there_is_valid_api_token';
 export const API_TOKEN_MIN_LENGTH = 40;
 
 export const MILLISECONDS_IN_1_SECOND = 1000;
@@ -27,5 +28,12 @@ export const HUMAN_READABLE_DATETIME_FORMAT = 'PPpp';
 export const HUMAN_READABLE_DATE_FORMAT = 'PP';
 
 // URLs
+export const URL_4SQ_V2_ENDPOINT_CHECKINS =
+  'https://api.foursquare.com/v2/users/self/checkins';
 export const URL_4SQUARE_API_DOCS =
   'https://location.foursquare.com/developer/reference/foursquare-api-overview';
+
+export const SLIDING_PANEL_DIMENSIONS = {
+  width: '65%',
+  from: 'right'
+};

@@ -1,13 +1,14 @@
 import type { LatLngExpression } from 'leaflet';
 import * as React from 'react';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
-import type { FoursquareVenue, FoursquareVenueWithCheckins } from './AppTypes';
-import MappedPoppedUp from './MappedPoppedUp';
+import type {
+  FoursquareVenue,
+  FoursquareVenueWithCheckins
+} from '../lib/Types';
 import MappedMarkers from './MappedMarkers';
 
 const Mapped = ({
   venues,
-  activeVenueWithCheckins,
   onVenueSelected,
   origin,
   zoom
@@ -30,12 +31,6 @@ const Mapped = ({
       scrollWheelZoom={false}
     >
       <MappedMarkers venues={venues} onVenueSelected={onVenueSelected} />
-      {activeVenueWithCheckins && (
-        <MappedPoppedUp
-          activeVenueWithCheckins={activeVenueWithCheckins}
-          onVenueSelected={onVenueSelected}
-        />
-      )}
       <TileLayer
         // eslint-disable-next-line max-len
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

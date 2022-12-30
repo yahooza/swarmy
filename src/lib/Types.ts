@@ -3,17 +3,21 @@ export type QueryParams = Record<string, string>;
 
 export type ApiToken = string | null | undefined;
 
+export type Environment = 'production' | 'development';
+
 /**
  * Config (both User & App)
  * @see ./src/config.json.default (for the app config)
  */
 export enum ConfigKey {
+  Environment = 'environment',
   Token = 'token',
   Latlng = 'latlng',
   Zoom = 'zoom'
 }
 
 export interface AppConfig {
+  [ConfigKey.Environment]?: string;
   [ConfigKey.Latlng]?: Array<number>;
   [ConfigKey.Zoom]?: number;
 }
@@ -25,32 +29,56 @@ export interface UserConfig {
 // when the User wants to update the Config
 export type UserConfigUpdateCallback = (updatedUserConfig: UserConfig) => void;
 
-export type onModalToggleCallback = (brute?: boolean) => void;
+export type ToggleModalCallback = (brute?: boolean) => void;
 
 /**
  * Messages: Toasts!
  */
-export type AppMessage = 'error' | 'warning' | 'success' | null | undefined;
-export type AppMessageCallback = ({
+export enum MessageKey {
+  Error = 'error',
+  Warning = 'warning',
+  Success = 'success'
+}
+
+export type Message =
+  | MessageKey.Error
+  | MessageKey.Warning
+  | MessageKey.Success
+  | null
+  | undefined;
+
+export type MessageCallback = ({
   message,
   type
 }: {
   message: string;
-  type?: AppMessage;
+  type?: Message;
 }) => void;
 
 /**
  * API Fetch state
  */
 export interface FetchState {
-  hasMorePastCheckins: boolean;
-  newestCheckinTimestamp?: number;
-  oldestCheckinTimestamp?: number;
+  token: string;
+  bounds: {
+    oldest: number | null | undefined;
+    newest: number | null | undefined;
+  };
 }
 
 /**
  * Foursquare API types
  */
+
+export interface FoursquarePhoto {
+  id: string;
+  createdAt: number;
+  prefix: string;
+  suffix: string;
+  width: number;
+  height: number;
+}
+
 export interface FoursquareVenue {
   id: string;
   name: string;
@@ -67,14 +95,7 @@ export interface FoursquareCheckin {
   id: string;
   createdAt: number;
   photos?: {
-    items?: [
-      id: string,
-      createdAt: number,
-      prefix: string,
-      suffix: string,
-      width: number,
-      height: number
-    ];
+    items?: FoursquarePhoto[];
   };
   venue: FoursquareVenue;
 }

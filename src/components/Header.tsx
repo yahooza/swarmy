@@ -14,10 +14,10 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import type {
   FoursquareCheckin,
   FoursquareVenue,
-  onModalToggleCallback
-} from './AppTypes';
-import { HUMAN_READABLE_DATE_FORMAT, ZERO } from './AppConstants';
-import Metric from './Metric';
+  ToggleModalCallback
+} from '../lib/Types';
+import { HUMAN_READABLE_DATE_FORMAT, ZERO } from '../lib/Constants';
+import HeaderMetric from './HeaderMetric';
 
 const Header = ({
   checkins,
@@ -30,23 +30,19 @@ const Header = ({
   venues: Map<string, FoursquareVenue> | null | undefined;
   activeVenue: FoursquareVenue | null | undefined;
   onVenueSelected: (venueId: string) => void;
-  onToggleSettings: onModalToggleCallback;
+  onToggleSettings: ToggleModalCallback;
 }) => {
   const first = [...checkins].pop();
 
   return (
-    <AppBar
-      enableColorOnDark
-      position="fixed"
-      sx={{ backgroundColor: 'rgba(0, 0, 0, 0.35)' }}
-    >
+    <AppBar position="fixed" sx={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
       <Toolbar
         sx={{
-          gap: 6
+          gap: 5
         }}
       >
         <MapTwoToneIcon fontSize="large" titleAccess="Four Maps" />
-        <Metric
+        <HeaderMetric
           name="Since"
           value={
             first && first.createdAt
@@ -58,11 +54,14 @@ const Header = ({
           }
           size="large"
         />
-        <Metric
+        <HeaderMetric
           name="Checkins"
           value={(checkins?.length ?? ZERO).toLocaleString()}
         />
-        <Metric name="Venues" value={(venues?.size ?? ZERO).toLocaleString()} />
+        <HeaderMetric
+          name="Venues"
+          value={(venues?.size ?? ZERO).toLocaleString()}
+        />
         <Autocomplete
           id="4maps-search"
           blurOnSelect

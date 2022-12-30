@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { Popup, useMapEvents } from 'react-leaflet';
-import { fromUnixTime, formatISO, format } from 'date-fns';
-import type { FoursquareVenueWithCheckins } from './AppTypes';
-
-import { Card, CardHeader, CardContent, List, ListItem } from '@mui/material';
+import type { FoursquareVenueWithCheckins } from '../lib/Types';
+import { ZERO } from '../lib/Constants';
+import { Card, CardHeader, CardContent } from '@mui/material';
+import CheckinsList from './CheckinsList';
 
 const MappedPoppedUp = ({
   activeVenueWithCheckins,
@@ -18,34 +18,22 @@ const MappedPoppedUp = ({
       onVenueSelected(null);
     }
   });
-
-  /*
-  // Photos
-  const photos = React.useMemo(() => {
-    return activeVenueWithCheckins.checkins
-      .map(checkin => checkin.photos?.items ?? null)
-      .filter(item => item !== null)
-  }, [activeVenueWithCheckins])
-  */
+  const { lat, lng } = activeVenueWithCheckins.venue.location;
 
   return (
-    <Popup
-      position={[
-        activeVenueWithCheckins.venue.location.lat,
-        activeVenueWithCheckins.venue.location.lng
-      ]}
-      minWidth={300}
-      maxHeight={500}
-    >
+    <Popup position={[lat, lng]} minWidth={300} maxHeight={500}>
       <Card
         sx={{
-          mx: -2.5,
+          mx: -1.5,
           boxShadow: 'none'
         }}
       >
         <CardHeader
           title={activeVenueWithCheckins.venue.name}
-          subheader={activeVenueWithCheckins.venue.location.formattedAddress}
+          // eslint-disable-next-line max-len
+          subheader={activeVenueWithCheckins.venue.location.formattedAddress.join(
+            '\n'
+          )}
           subheaderTypographyProps={{
             sx: {
               lineHeight: 'initial'
@@ -60,23 +48,9 @@ const MappedPoppedUp = ({
             py: 0
           }}
         >
-          <List sx={{ width: '100%' }}>
-            {activeVenueWithCheckins.checkins.map((checkin) => {
-              const checkinTime = fromUnixTime(checkin.createdAt);
-              return (
-                <ListItem
-                  key={checkin.id}
-                  disableGutters
-                  disablePadding
-                  alignItems="flex-start"
-                >
-                  <time dateTime={formatISO(checkinTime)}>
-                    {format(checkinTime, 'PPpp')}
-                  </time>
-                </ListItem>
-              );
-            })}
-          </List>
+          {activeVenueWithCheckins.checkins.length > ZERO && (
+            <CheckinsList checkins={activeVenueWithCheckins.checkins} />
+          )}
         </CardContent>
       </Card>
     </Popup>
