@@ -144,7 +144,6 @@ const Mapper = ({
             bounds: {
               ...prevState.bounds,
               oldest:
-                environment !== 'development' &&
                 newCheckins.length === FETCH_LIMIT
                   ? newCheckins.slice().pop().createdAt
                   : null
