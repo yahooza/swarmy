@@ -80,7 +80,7 @@ export const VenueDetails = ({ onClose, venueWithCheckins }: Props) => {
             />
             <Tab
               label={`${t('photos')} (${photos?.length ?? ZERO})`}
-              value={t('photos')}
+              value="photos"
             />
           </TabList>
         </Box>
