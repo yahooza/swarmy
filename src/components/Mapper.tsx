@@ -12,32 +12,22 @@ import {
   FoursquareVenue,
   FoursquareCheckin,
   FoursquareVenueWithCheckins,
-  AppConfig,
-  MessageCallback,
-  UserConfig,
-  UserConfigUpdateCallback,
+  MapConfig,
   ToggleModalCallback,
   MessageKey
 } from '../lib/Types';
 import { isValidApiToken } from '../lib/Utils';
+import { AppContext, AppContextType } from './AppProvider';
 
 import Header from './Header';
 import Mapped from './Mapped';
 import Settings from './Settings';
 import { VenueDetails } from './VenueDetails';
 
-const Mapper = ({
-  environment = 'production',
-  token,
-  latlng,
-  zoom,
-  sendMessage,
-  updateUserConfig
-}: AppConfig &
-  UserConfig & {
-    sendMessage: MessageCallback;
-    updateUserConfig: UserConfigUpdateCallback;
-  }) => {
+const Mapper = ({ latlng, zoom }: MapConfig) => {
+  const { environment, token, sendMessage, updateSettings } = React.useContext(
+    AppContext
+  ) as AppContextType;
   const [fetchState, setFetchState] = React.useState<FetchState>(() => {
     const timestamp = Math.floor(
       new Date().getTime() / MILLISECONDS_IN_1_SECOND
@@ -144,7 +134,8 @@ const Mapper = ({
             bounds: {
               ...prevState.bounds,
               oldest:
-                newCheckins.length === FETCH_LIMIT
+                newCheckins.length === FETCH_LIMIT &&
+                environment !== 'development'
                   ? newCheckins.slice().pop().createdAt
                   : null
             }
@@ -245,11 +236,7 @@ const Mapper = ({
         }}
       />
       {(!hasValidToken || settingsOpen) && (
-        <Settings
-          token={token}
-          onToggleSettings={onToggleSettings}
-          updateUserConfig={updateUserConfig}
-        />
+        <Settings onToggleSettings={onToggleSettings} />
       )}
       <Mapped
         venues={venues}

@@ -21,7 +21,7 @@ export const FETCH_LIMIT = 250;
 export const FETCH_OFFSET_IN_MILLISECONDS = 1;
 
 // LocalStorage!
-export const STORAGE_USER_CONFIG = 'app-localstorage-app-config-key';
+export const STORAGE_SETTINGS_KEY = 'app-localstorage-app-config-key';
 
 // Dates, times, etc.
 export const HUMAN_READABLE_DATETIME_FORMAT = 'PPpp';

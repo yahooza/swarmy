@@ -1,10 +1,11 @@
 import React from 'react';
+// import * as dotenv from 'dotenv';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { SnackbarProvider } from 'notistack';
-import Platform from './Platform';
+import { AppProvider } from './AppProvider';
+import Mapper from './Mapper';
 
-const AppConfig = {
-  environment: 'development',
+const MapConfig = {
   // eslint-disable-next-line no-magic-numbers
   latlng: [37.55305, -122.31909],
   zoom: 15
@@ -27,7 +28,9 @@ const App = () => {
         maxSnack={5}
         autoHideDuration={1500}
       >
-        <Platform config={AppConfig} />
+        <AppProvider>
+          <Mapper {...MapConfig} />
+        </AppProvider>
       </SnackbarProvider>
     </ThemeProvider>
   );

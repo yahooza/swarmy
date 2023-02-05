@@ -14,6 +14,7 @@ Fourmaps: updated with modern JavaScript
 ### 3rd partie libs
 
 - HTML + CSS Slide Slideshow [https://codepen.io/prathkum/pen/bGBOzXj](https://codepen.io/prathkum/pen/bGBOzXj)
+- usehooks-ts [https://github.com/juliencrn/usehooks-ts](https://github.com/juliencrn/usehooks-ts)
 - Multi-Snackbars! [https://notistack.com/](https://notistack.com/)
 
 ### Options

@@ -1,45 +1,57 @@
+import { Button } from '@mui/material';
+import { SnackbarKey, useSnackbar } from 'notistack';
 import * as React from 'react';
 import { useLocalStorage } from 'usehooks-ts';
-import { useSnackbar } from 'notistack';
-import { Button } from '@mui/material';
-
 import {
-  UserConfig,
-  MessageCallback,
-  UserConfigUpdateCallback,
-  Message,
-  ConfigKey,
-  MessageKey
-} from '../lib/Types';
-import {
-  STORAGE_USER_CONFIG,
   MILLISECONDS_IN_1_SECOND,
   SECONDS_TO_DISPLAY_ERROR_MSG,
   SECONDS_TO_DISPLAY_SUCCESS_MSG,
-  API_TOKEN_NOT_VALID
+  STORAGE_SETTINGS_KEY
 } from '../lib/Constants';
-import Mapper from './Mapper';
+import {
+  Message,
+  MessageCallback,
+  MessageKey,
+  Settings,
+  SettingsKey,
+  SettingsUpdateCallback
+} from '../lib/Types';
 
-const Platform = ({
-  config
-}: {
-  config: Record<string, string | number[] | number>;
-}) => {
+export type AppContextType = {
+  token: string | null;
+  environment: string;
+  sendMessage: MessageCallback;
+  updateSettings: SettingsUpdateCallback;
+};
+
+export const AppContext = React.createContext<AppContextType | null>(null);
+
+interface Props {
+  children: React.ReactNode;
+}
+
+export const AppProvider: React.FC<Props> = ({ children }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const [userConfig, setUserConfig] = useLocalStorage<UserConfig>(
-    STORAGE_USER_CONFIG,
+  const [settings, setSettings] = useLocalStorage<Settings>(
+    STORAGE_SETTINGS_KEY,
     {
-      [ConfigKey.Token]: null
+      [SettingsKey.Token]: null
     }
+  );
+
+  const [environment] = React.useState<string>(
+    location.hostname.toLowerCase() !== 'localhost'
+      ? 'production'
+      : 'development'
   );
 
   /**
    * LocalStorage stuff.
    * For now, updates only the API token
    */
-  const updateUserConfig: UserConfigUpdateCallback = React.useCallback(
-    (updates: UserConfig) => {
-      setUserConfig((prevState: UserConfig) => {
+  const updateSettings: SettingsUpdateCallback = React.useCallback(
+    (updates: Settings) => {
+      setSettings((prevState: Settings) => {
         return {
           ...prevState,
           ...updates
@@ -68,7 +80,7 @@ const Platform = ({
             variant: type,
             autoHideDuration:
               SECONDS_TO_DISPLAY_ERROR_MSG * MILLISECONDS_IN_1_SECOND,
-            action: (snackbarId) => (
+            action: (snackbarId: SnackbarKey) => (
               <Button
                 variant="contained"
                 color="error"
@@ -97,14 +109,15 @@ const Platform = ({
   );
 
   return (
-    <Mapper
-      key={userConfig[ConfigKey.Token] ?? API_TOKEN_NOT_VALID}
-      token={userConfig[ConfigKey.Token] ?? undefined}
-      sendMessage={sendMessage}
-      updateUserConfig={updateUserConfig}
-      {...config}
-    />
+    <AppContext.Provider
+      value={{
+        environment,
+        token: settings[SettingsKey.Token],
+        sendMessage,
+        updateSettings
+      }}
+    >
+      {children}
+    </AppContext.Provider>
   );
 };
-
-export default Platform;

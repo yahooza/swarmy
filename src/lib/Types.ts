@@ -9,30 +9,35 @@ export type Environment = 'production' | 'development';
  * Config (both User & App)
  * @see ./src/config.json.default (for the app config)
  */
-export enum ConfigKey {
-  Environment = 'environment',
-  Token = 'token',
+export enum AppKey {
   Latlng = 'latlng',
   Zoom = 'zoom'
 }
 
-export interface AppConfig {
-  [ConfigKey.Environment]?: string;
-  [ConfigKey.Latlng]?: Array<number>;
-  [ConfigKey.Zoom]?: number;
+export interface MapConfig {
+  [AppKey.Latlng]?: Array<number>;
+  [AppKey.Zoom]?: number;
 }
 
-export interface UserConfig {
-  [ConfigKey.Token]?: string | undefined;
+/**
+ * Config (both User & App)
+ * @see ./src/config.json.default (for the app config)
+ */
+export enum SettingsKey {
+  Token = 'token'
+}
+
+export interface Settings {
+  [SettingsKey.Token]?: string | undefined;
 }
 
 // when the User wants to update the Config
-export type UserConfigUpdateCallback = (updatedUserConfig: UserConfig) => void;
+export type SettingsUpdateCallback = (updatedSettings: Settings) => void;
 
 export type ToggleModalCallback = (brute?: boolean) => void;
 
 /**
- * Messages: Toasts!
+ * Messages
  */
 export enum MessageKey {
   Error = 'error',
@@ -69,7 +74,6 @@ export interface FetchState {
 /**
  * Foursquare API types
  */
-
 export interface FoursquarePhoto {
   id: string;
   createdAt: number;

@@ -10,46 +10,43 @@ import {
   TextField
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React from 'react';
-import {
-  ConfigKey,
-  ToggleModalCallback,
-  UserConfigUpdateCallback
-} from '../lib/Types';
+import React, { useMemo } from 'react';
+import { ToggleModalCallback, SettingsKey } from '../lib/Types';
 import { isValidApiToken } from '../lib/Utils';
 import { URL_4SQUARE_API_DOCS } from '../lib/Constants';
+import { AppContext, AppContextType } from './AppProvider';
 
 const Settings = ({
-  token,
-  onToggleSettings,
-  updateUserConfig
+  onToggleSettings
 }: {
-  token?: string | null;
   onToggleSettings: ToggleModalCallback;
-  updateUserConfig: UserConfigUpdateCallback;
 }) => {
-  const [localToken, setLocalToken] = React.useState<string | null>(
-    token ?? null
-  );
+  const { token, updateSettings } = React.useContext(
+    AppContext
+  ) as AppContextType;
+
+  // Used to validate the unsaved token
+  const [tmpToken, setTmpToken] = React.useState<string>(token ?? '');
   const tokenRef = React.useRef<HTMLInputElement>(null);
 
   const onSave = React.useCallback(() => {
-    updateUserConfig({
-      [ConfigKey.Token]: tokenRef?.current?.value
+    updateSettings({
+      [SettingsKey.Token]: tokenRef?.current?.value
     });
-  }, [updateUserConfig]);
+  }, [updateSettings]);
 
   const onRemove = React.useCallback(() => {
     if (window.confirm(`Are you sure you want to delete this token?`)) {
-      updateUserConfig({
-        [ConfigKey.Token]: null
+      updateSettings({
+        [SettingsKey.Token]: null
       });
+      setTmpToken('');
     }
-  }, [updateUserConfig]);
+  }, [updateSettings]);
 
-  const isSavable = React.useMemo(
-    () => isValidApiToken({ token: localToken }),
-    [localToken]
+  const isSavable = useMemo(
+    () => isValidApiToken({ token: tmpToken }),
+    [tmpToken]
   );
 
   return (
@@ -58,18 +55,17 @@ const Settings = ({
         <DialogTitle>Settings</DialogTitle>
         <DialogContent
           sx={{
-            minWidth: 500,
-            width: '50vw'
+            minWidth: 500
           }}
         >
           <TextField
             autoComplete="off"
             label="Token"
             variant="standard"
-            defaultValue={localToken ?? ''}
+            defaultValue={token ?? ''}
             inputRef={tokenRef}
             onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-              setLocalToken((event.target as HTMLInputElement).value)
+              setTmpToken((event.target as HTMLInputElement).value)
             }
             sx={{
               width: '100%'
@@ -83,11 +79,7 @@ const Settings = ({
             .
           </FormHelperText>
         </DialogContent>
-        <DialogActions
-          sx={{
-            justifyContent: 'space-between'
-          }}
-        >
+        <DialogActions>
           <Stack direction="row" spacing={1.5}>
             <Button type="submit" variant="contained" disabled={!isSavable}>
               Save
@@ -95,7 +87,7 @@ const Settings = ({
             <Button
               variant="outlined"
               onClick={() => onToggleSettings(false)}
-              disabled={!token}
+              disabled={!isSavable}
             >
               Cancel
             </Button>
@@ -104,7 +96,7 @@ const Settings = ({
             color="error"
             aria-label="delete"
             onClick={onRemove}
-            disabled={!token}
+            disabled={tmpToken.length < 1}
           >
             <DeleteIcon />
           </IconButton>

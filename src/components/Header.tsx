@@ -32,7 +32,7 @@ const Header = ({
   onVenueSelected: (venueId: string) => void;
   onToggleSettings: ToggleModalCallback;
 }) => {
-  const first = [...checkins].pop();
+  const first = [...checkins].shift();
 
   return (
     <AppBar position="fixed" sx={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
@@ -41,7 +41,7 @@ const Header = ({
           gap: 5
         }}
       >
-        <MapTwoToneIcon fontSize="large" titleAccess="Four Maps" />
+        <MapTwoToneIcon fontSize="large" titleAccess="FourMaps" />
         <HeaderMetric
           name="Since"
           value={
