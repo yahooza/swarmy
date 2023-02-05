@@ -76,9 +76,12 @@ const Header = ({
           }}
           options={Array.from(venues.values())}
           value={activeVenue ?? null}
-          getOptionLabel={(option: FoursquareVenue) =>
-            [option.name, option.location.formattedAddress].join(', ')
-          }
+          getOptionLabel={(option: FoursquareVenue) => {
+            return [
+              option.name,
+              option.location.formattedAddress.join(', ')
+            ].join(': ');
+          }}
           renderInput={(params) => {
             return (
               <TextField
