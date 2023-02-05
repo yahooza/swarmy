@@ -21,6 +21,9 @@
     },
     "question": {
       "delete_token": "Are you sure you want to delete this token?"
+    },
+    "message": {
+      "error-processing-checkins": "Failed to process checkins"
     }
   }
 }

@@ -1,5 +1,6 @@
 import type { LatLngExpression } from 'leaflet';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   FETCH_LIMIT,
   FETCH_OFFSET_IN_MILLISECONDS,
@@ -25,8 +26,10 @@ import Settings from './Settings';
 import { VenueDetails } from './VenueDetails';
 
 const Mapper = ({ latlng, zoom }: MapConfig) => {
-  const { environment, token, sendMessage, updateUserSettings } =
-    React.useContext(AppContext) as AppContextType;
+  const { t } = useTranslation();
+  const { environment, token, sendMessage } = React.useContext(
+    AppContext
+  ) as AppContextType;
   const [fetchState, setFetchState] = React.useState<FetchState>(() => {
     const timestamp = Math.floor(
       new Date().getTime() / MILLISECONDS_IN_1_SECOND
@@ -76,7 +79,7 @@ const Mapper = ({ latlng, zoom }: MapConfig) => {
     } catch (exception) {
       sendMessage({
         type: MessageKey.Error,
-        message: 'Failed to process checkins'
+        message: t('message.error-processing-checkins')
       });
     }
     return false;
@@ -230,9 +233,7 @@ const Mapper = ({ latlng, zoom }: MapConfig) => {
       />
       <VenueDetails
         venueWithCheckins={activeVenueWithCheckins}
-        onClose={() => {
-          onVenueSelected(null);
-        }}
+        onClose={() => onVenueSelected(null)}
       />
       {(!hasValidToken || settingsOpen) && (
         <Settings onToggleSettings={onToggleSettings} />
