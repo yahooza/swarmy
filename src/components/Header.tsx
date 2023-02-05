@@ -80,8 +80,10 @@ const Header = ({
           value={activeVenue ?? null}
           getOptionLabel={(option: FoursquareVenue) => {
             return [
-              option.name,
-              option.location.formattedAddress.join(', ')
+              option?.name,
+              option?.location?.formattedAddress
+                ? option.location.formattedAddress.join(', ')
+                : ''
             ].join(': ');
           }}
           renderInput={(params) => {
