@@ -1,6 +1,6 @@
+import * as React from 'react';
 import { Button } from '@mui/material';
 import { SnackbarKey, useSnackbar } from 'notistack';
-import * as React from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import {
   MILLISECONDS_IN_1_SECOND,

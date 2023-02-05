@@ -1,5 +1,6 @@
 import React from 'react';
 // import * as dotenv from 'dotenv';
+import '../lib/i18n';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { SnackbarProvider } from 'notistack';
 import { AppProvider } from './AppProvider';

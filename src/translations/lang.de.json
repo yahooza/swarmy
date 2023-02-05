@@ -1,0 +1,23 @@
+{
+  "language": "de",
+  "translation": {
+    "settings": "die Einstellungen",
+    "checkins": "Einchecken",
+    "venues": "Veranstaltungsorte",
+    "venue_details": "Einzelheiten zum Veranstaltungsort",
+    "photos": "Fotos",
+    "action": {
+      "cancel": "Stornieren",
+      "delete": "Löschen",
+      "search_venues": "Veranstaltungsorte suchen",
+      "save": "Speichern",
+      "submit": "Einreichen"
+    },
+    "time": {
+      "since_sometime_ago": "Seit"
+    },
+    "question": {
+      "delete_token": "Möchten Sie dieses Token wirklich löschen?"
+    }
+  }
+}

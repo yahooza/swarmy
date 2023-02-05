@@ -5,6 +5,7 @@ import { ZERO } from '../lib/Constants';
 import { FoursquareVenueWithCheckins } from '../lib/Types';
 import CheckinsList from './CheckinsList';
 import PhotosList from './PhotosList';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   onClose: () => void;
@@ -12,6 +13,7 @@ type Props = {
 };
 
 export const VenueDetails = ({ onClose, venueWithCheckins }: Props) => {
+  const { t } = useTranslation();
   // Unique Venue
   const venueId = React.useMemo(
     () => venueWithCheckins?.venue?.id ?? null,
@@ -71,16 +73,19 @@ export const VenueDetails = ({ onClose, venueWithCheckins }: Props) => {
       </Box>
       <TabContext value={tab}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleTabChange} aria-label="lab API tabs example">
+          <TabList onChange={handleTabChange} aria-label={t('venue_details')}>
             <Tab
-              label={`Checkins (${checkins?.length ?? ZERO})`}
+              label={`${t('checkins')} (${checkins?.length ?? ZERO})`}
               value="checkins"
             />
-            <Tab label={`Photos (${photos?.length ?? ZERO})`} value="photos" />
+            <Tab
+              label={`${t('photos')} (${photos?.length ?? ZERO})`}
+              value={t('photos')}
+            />
           </TabList>
         </Box>
         <TabPanel
-          value="checkins"
+          value={t('checkins')}
           sx={{
             my: 1,
             px: 0
@@ -89,7 +94,7 @@ export const VenueDetails = ({ onClose, venueWithCheckins }: Props) => {
           <CheckinsList checkins={checkins} />
         </TabPanel>
         <TabPanel
-          value="photos"
+          value={t('photos')}
           sx={{
             px: 0
           }}

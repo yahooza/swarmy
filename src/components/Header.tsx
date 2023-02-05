@@ -18,6 +18,7 @@ import type {
 } from '../lib/Types';
 import { HUMAN_READABLE_DATE_FORMAT, ZERO } from '../lib/Constants';
 import HeaderMetric from './HeaderMetric';
+import { useTranslation } from 'react-i18next';
 
 const Header = ({
   checkins,
@@ -32,6 +33,7 @@ const Header = ({
   onVenueSelected: (venueId: string) => void;
   onToggleSettings: ToggleModalCallback;
 }) => {
+  const { t } = useTranslation();
   const first = [...checkins].shift();
 
   return (
@@ -41,9 +43,9 @@ const Header = ({
           gap: 5
         }}
       >
-        <MapTwoToneIcon fontSize="large" titleAccess="FourMaps" />
+        <MapTwoToneIcon fontSize="large" titleAccess={t('app.name')} />
         <HeaderMetric
-          name="Since"
+          name={t('time.since_sometime_ago')}
           value={
             first && first.createdAt
               ? format(
@@ -55,11 +57,11 @@ const Header = ({
           size="large"
         />
         <HeaderMetric
-          name="Checkins"
+          name={t('checkins')}
           value={(checkins?.length ?? ZERO).toLocaleString()}
         />
         <HeaderMetric
-          name="Venues"
+          name={t('venues')}
           value={(venues?.size ?? ZERO).toLocaleString()}
         />
         <Autocomplete
@@ -88,7 +90,7 @@ const Header = ({
                 {...params}
                 size="small"
                 fullWidth
-                placeholder="Search venues"
+                placeholder={t('action.search_venues')}
                 inputProps={{
                   ...params.inputProps,
                   sx: {
@@ -118,7 +120,7 @@ const Header = ({
           color="secondary"
           size="large"
           variant="contained"
-          aria-label="Settings"
+          aria-label={t('settings')}
           sx={{
             minWidth: 'initial'
           }}

@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ToggleModalCallback, UserSettingsKey } from '../lib/Types';
 import { isValidApiToken } from '../lib/Utils';
 import { URL_4SQUARE_API_DOCS } from '../lib/Constants';
@@ -24,6 +25,7 @@ const Settings = ({
   const { token, updateUserSettings } = React.useContext(
     AppContext
   ) as AppContextType;
+  const { t } = useTranslation();
 
   // Used to validate the unsaved token
   const [tmpToken, setTmpToken] = React.useState<string>(token ?? '');
@@ -36,7 +38,7 @@ const Settings = ({
   }, [updateUserSettings]);
 
   const onRemove = React.useCallback(() => {
-    if (window.confirm(`Are you sure you want to delete this token?`)) {
+    if (window.confirm(t('question.delete_token'))) {
       updateUserSettings({
         [UserSettingsKey.Token]: null
       });
@@ -52,7 +54,7 @@ const Settings = ({
   return (
     <Dialog onClose={() => onToggleSettings(false)} open={true}>
       <form onSubmit={onSave}>
-        <DialogTitle>Settings</DialogTitle>
+        <DialogTitle>{t('settings')}</DialogTitle>
         <DialogContent
           sx={{
             minWidth: 500
@@ -82,19 +84,19 @@ const Settings = ({
         <DialogActions>
           <Stack direction="row" spacing={1.5}>
             <Button type="submit" variant="contained" disabled={!isSavable}>
-              Save
+              {t('action.save')}
             </Button>
             <Button
               variant="outlined"
               onClick={() => onToggleSettings(false)}
               disabled={!isSavable}
             >
-              Cancel
+              {t('action.cancel')}
             </Button>
           </Stack>
           <IconButton
             color="error"
-            aria-label="delete"
+            aria-label={t('action.delete')}
             onClick={onRemove}
             disabled={tmpToken.length < 1}
           >
