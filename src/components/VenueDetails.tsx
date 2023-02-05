@@ -85,7 +85,7 @@ export const VenueDetails = ({ onClose, venueWithCheckins }: Props) => {
           </TabList>
         </Box>
         <TabPanel
-          value={t('checkins')}
+          value="checkins"
           sx={{
             my: 1,
             px: 0
@@ -94,7 +94,7 @@ export const VenueDetails = ({ onClose, venueWithCheckins }: Props) => {
           <CheckinsList checkins={checkins} />
         </TabPanel>
         <TabPanel
-          value={t('photos')}
+          value="photos"
           sx={{
             px: 0
           }}
