@@ -25,9 +25,8 @@ import Settings from './Settings';
 import { VenueDetails } from './VenueDetails';
 
 const Mapper = ({ latlng, zoom }: MapConfig) => {
-  const { environment, token, sendMessage, updateSettings } = React.useContext(
-    AppContext
-  ) as AppContextType;
+  const { environment, token, sendMessage, updateUserSettings } =
+    React.useContext(AppContext) as AppContextType;
   const [fetchState, setFetchState] = React.useState<FetchState>(() => {
     const timestamp = Math.floor(
       new Date().getTime() / MILLISECONDS_IN_1_SECOND

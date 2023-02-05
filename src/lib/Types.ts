@@ -6,33 +6,32 @@ export type ApiToken = string | null | undefined;
 export type Environment = 'production' | 'development';
 
 /**
- * Config (both User & App)
- * @see ./src/config.json.default (for the app config)
+ * Config for the App
  */
-export enum AppKey {
+export enum MapConfigKey {
   Latlng = 'latlng',
   Zoom = 'zoom'
 }
 
 export interface MapConfig {
-  [AppKey.Latlng]?: Array<number>;
-  [AppKey.Zoom]?: number;
+  [MapConfigKey.Latlng]?: Array<number>;
+  [MapConfigKey.Zoom]?: number;
 }
 
 /**
  * Config (both User & App)
  * @see ./src/config.json.default (for the app config)
  */
-export enum SettingsKey {
+export enum UserSettingsKey {
   Token = 'token'
 }
 
-export interface Settings {
-  [SettingsKey.Token]?: string | undefined;
+export interface UserSettings {
+  [UserSettingsKey.Token]?: string | undefined;
 }
 
 // when the User wants to update the Config
-export type SettingsUpdateCallback = (updatedSettings: Settings) => void;
+export type UpdateSettingsCallback = (updatedSettings: UserSettings) => void;
 
 export type ToggleModalCallback = (brute?: boolean) => void;
 

@@ -10,18 +10,18 @@ import {
 } from '../lib/Constants';
 import {
   Message,
-  MessageCallback,
   MessageKey,
-  Settings,
-  SettingsKey,
-  SettingsUpdateCallback
+  MessageCallback,
+  UserSettings,
+  UserSettingsKey,
+  UpdateSettingsCallback
 } from '../lib/Types';
 
 export type AppContextType = {
   token: string | null;
   environment: string;
   sendMessage: MessageCallback;
-  updateSettings: SettingsUpdateCallback;
+  updateUserSettings: UpdateSettingsCallback;
 };
 
 export const AppContext = React.createContext<AppContextType | null>(null);
@@ -32,10 +32,10 @@ interface Props {
 
 export const AppProvider: React.FC<Props> = ({ children }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const [settings, setSettings] = useLocalStorage<Settings>(
+  const [userSettings, setUserSettings] = useLocalStorage<UserSettings>(
     STORAGE_SETTINGS_KEY,
     {
-      [SettingsKey.Token]: null
+      [UserSettingsKey.Token]: null
     }
   );
 
@@ -49,9 +49,9 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
    * LocalStorage stuff.
    * For now, updates only the API token
    */
-  const updateSettings: SettingsUpdateCallback = React.useCallback(
-    (updates: Settings) => {
-      setSettings((prevState: Settings) => {
+  const updateUserSettings: UpdateSettingsCallback = React.useCallback(
+    (updates: UserSettings) => {
+      setUserSettings((prevState: UserSettings) => {
         return {
           ...prevState,
           ...updates
@@ -112,9 +112,9 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
     <AppContext.Provider
       value={{
         environment,
-        token: settings[SettingsKey.Token],
+        token: userSettings[UserSettingsKey.Token],
         sendMessage,
-        updateSettings
+        updateUserSettings
       }}
     >
       {children}

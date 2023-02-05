@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, { useMemo } from 'react';
-import { ToggleModalCallback, SettingsKey } from '../lib/Types';
+import { ToggleModalCallback, UserSettingsKey } from '../lib/Types';
 import { isValidApiToken } from '../lib/Utils';
 import { URL_4SQUARE_API_DOCS } from '../lib/Constants';
 import { AppContext, AppContextType } from './AppProvider';
@@ -21,7 +21,7 @@ const Settings = ({
 }: {
   onToggleSettings: ToggleModalCallback;
 }) => {
-  const { token, updateSettings } = React.useContext(
+  const { token, updateUserSettings } = React.useContext(
     AppContext
   ) as AppContextType;
 
@@ -30,19 +30,19 @@ const Settings = ({
   const tokenRef = React.useRef<HTMLInputElement>(null);
 
   const onSave = React.useCallback(() => {
-    updateSettings({
-      [SettingsKey.Token]: tokenRef?.current?.value
+    updateUserSettings({
+      [UserSettingsKey.Token]: tokenRef?.current?.value
     });
-  }, [updateSettings]);
+  }, [updateUserSettings]);
 
   const onRemove = React.useCallback(() => {
     if (window.confirm(`Are you sure you want to delete this token?`)) {
-      updateSettings({
-        [SettingsKey.Token]: null
+      updateUserSettings({
+        [UserSettingsKey.Token]: null
       });
       setTmpToken('');
     }
-  }, [updateSettings]);
+  }, [updateUserSettings]);
 
   const isSavable = useMemo(
     () => isValidApiToken({ token: tmpToken }),
