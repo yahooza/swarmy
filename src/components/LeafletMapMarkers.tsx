@@ -27,9 +27,7 @@ const LeafletMapMarkers = ({ venues, onVenueSelected }: Props) => {
                     return;
                   }
                 }}
-              >
-                {venue.name}
-              </Marker>
+              />
             );
           })}
     </>
