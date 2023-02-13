@@ -63,7 +63,6 @@ export type MessageCallback = ({
  * API Fetch state
  */
 export interface FetchState {
-  token: string;
   bounds: {
     oldest: number | null | undefined;
     newest: number | null | undefined;

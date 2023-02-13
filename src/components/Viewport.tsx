@@ -1,12 +1,8 @@
 import type { LatLngExpression } from 'leaflet';
-import React from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  FETCH_LIMIT,
-  FETCH_OFFSET_IN_MILLISECONDS,
-  MILLISECONDS_IN_1_SECOND,
-  URL_4SQ_V2_ENDPOINT_CHECKINS
-} from '../lib/Constants';
+import { FETCH_LIMIT, MILLISECONDS_IN_1_SECOND } from '../lib/Constants';
+import { fetchCheckins } from '../lib/Api';
 
 import {
   FetchState,
@@ -25,17 +21,16 @@ import Mapped from './Mapped';
 import Settings from './Settings';
 import { VenueDetails } from './VenueDetails';
 
-const Mapper = ({ latlng, zoom }: MapConfig) => {
+const Viewport = ({ latlng, zoom }: MapConfig) => {
   const { t } = useTranslation();
-  const { environment, token, sendMessage } = React.useContext(
+  const { environment, token, sendMessage } = useContext(
     AppContext
   ) as AppContextType;
-  const [fetchState, setFetchState] = React.useState<FetchState>(() => {
+  const [fetchState, setFetchState] = useState<FetchState>(() => {
     const timestamp = Math.floor(
       new Date().getTime() / MILLISECONDS_IN_1_SECOND
     );
     return {
-      token,
       bounds: {
         oldest: timestamp,
         newest: timestamp
@@ -43,20 +38,13 @@ const Mapper = ({ latlng, zoom }: MapConfig) => {
     };
   });
 
-  const [settingsOpen, setSettingsOpen] = React.useState<boolean>(false);
-  const [venues, setVenues] = React.useState(
-    new Map<string, FoursquareVenue>()
-  );
-  const [checkins, setCheckins] = React.useState<FoursquareCheckin[] | null>(
-    []
-  );
+  const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
+  const [venues, setVenues] = useState(new Map<string, FoursquareVenue>());
+  const [checkins, setCheckins] = useState<FoursquareCheckin[] | null>([]);
   const [activeVenueWithCheckins, setActiveVenueWithCheckins] =
-    React.useState<FoursquareVenueWithCheckins | null>(null);
+    useState<FoursquareVenueWithCheckins | null>(null);
 
-  const hasValidToken = React.useMemo(
-    () => isValidApiToken({ token }),
-    [token]
-  );
+  const hasValidToken = useMemo(() => isValidApiToken({ token }), [token]);
 
   /**
    * @param newCheckins Post-fetch callback to process checkins
@@ -86,40 +74,37 @@ const Mapper = ({ latlng, zoom }: MapConfig) => {
   };
 
   /**
-   * Get stuff the API
-   * @param before {number}
-   * @returns {void}
+   * Periodically, fetch new Foursquare Checkins
    */
-  const fetchCheckins = async ({
-    before,
-    after
-  }: {
-    before?: number | null;
-    after?: number | null;
-  }) => {
-    const params = new URLSearchParams({
-      v: '20130101',
-      limit: FETCH_LIMIT.toString(),
-      format: 'json',
-      oauth_token: fetchState.token
-    });
-    if (before != null) {
-      params.append(
-        'beforeTimestamp',
-        (before - FETCH_OFFSET_IN_MILLISECONDS).toString()
-      );
+  useEffect(() => {
+    return;
+    const INTERVAL_CHECK_FOR_NEW_CHECKINS_IN_SECONDS = 60;
+    const interval = setInterval(() => {
+      if (!hasValidToken || fetchState.bounds.newest == null) {
+        return;
+      }
+      fetchCheckins({
+        token,
+        after: checkins.slice().shift().createdAt
+      });
+    }, INTERVAL_CHECK_FOR_NEW_CHECKINS_IN_SECONDS * MILLISECONDS_IN_1_SECOND);
+    return () => clearInterval(interval);
+  }, [hasValidToken, fetchState.bounds.newest]);
+
+  /**
+   * Fetches previous Foursquare Checkins
+   */
+  useEffect(() => {
+    if (!hasValidToken || fetchState.bounds.oldest == null) {
+      return;
     }
-    if (after != null) {
-      params.append(
-        'afterTimestamp',
-        (after + FETCH_OFFSET_IN_MILLISECONDS).toString()
-      );
-    }
-    return await fetch([URL_4SQ_V2_ENDPOINT_CHECKINS, params].join('?'))
-      .then((response) => response.json())
-      .then((data) => {
-        const newCheckins = data?.response?.checkins?.items;
-        if (!newCheckins) {
+
+    fetchCheckins({
+      token,
+      before: fetchState.bounds.oldest
+    })
+      .then((newCheckins) => {
+        if (newCheckins === null) {
           return;
         }
 
@@ -143,7 +128,6 @@ const Mapper = ({ latlng, zoom }: MapConfig) => {
             }
           };
         });
-        return;
       })
       .catch((exception) => {
         sendMessage({
@@ -152,35 +136,6 @@ const Mapper = ({ latlng, zoom }: MapConfig) => {
         });
         return;
       });
-  };
-
-  /**
-   * Periodically, fetch new Foursquare Checkins
-   */
-  React.useEffect(() => {
-    return;
-    const INTERVAL_CHECK_FOR_NEW_CHECKINS_IN_SECONDS = 60;
-    const interval = setInterval(() => {
-      if (!hasValidToken || fetchState.bounds.newest == null) {
-        return;
-      }
-      fetchCheckins({
-        after: checkins.slice().shift().createdAt
-      });
-    }, INTERVAL_CHECK_FOR_NEW_CHECKINS_IN_SECONDS * MILLISECONDS_IN_1_SECOND);
-    return () => clearInterval(interval);
-  }, [hasValidToken, fetchState.bounds.newest]);
-
-  /**
-   * Fetches previous Foursquare Checkins
-   */
-  React.useEffect(() => {
-    if (!hasValidToken || fetchState.bounds.oldest == null) {
-      return;
-    }
-    fetchCheckins({
-      before: fetchState.bounds.oldest
-    });
     return;
   }, [hasValidToken, fetchState.bounds.oldest]);
 
@@ -214,7 +169,7 @@ const Mapper = ({ latlng, zoom }: MapConfig) => {
   };
 
   const onToggleSettings: ToggleModalCallback = (brute?: boolean) => {
-    if (brute !== undefined) {
+    if (brute != null) {
       setSettingsOpen(brute);
       return;
     }
@@ -249,4 +204,4 @@ const Mapper = ({ latlng, zoom }: MapConfig) => {
   );
 };
 
-export default Mapper;
+export default Viewport;

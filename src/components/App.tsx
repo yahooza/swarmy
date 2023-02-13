@@ -4,7 +4,7 @@ import '../lib/i18n';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { SnackbarProvider } from 'notistack';
 import { AppProvider } from './AppProvider';
-import Mapper from './Mapper';
+import Viewport from './Viewport';
 
 const MapConfig = {
   // eslint-disable-next-line no-magic-numbers
@@ -30,7 +30,7 @@ const App = () => {
         autoHideDuration={1500}
       >
         <AppProvider>
-          <Mapper {...MapConfig} />
+          <Viewport {...MapConfig} />
         </AppProvider>
       </SnackbarProvider>
     </ThemeProvider>
