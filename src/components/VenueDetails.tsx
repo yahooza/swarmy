@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Drawer, Tab, Typography } from '@mui/material';
 import { ZERO } from '../lib/Constants';
@@ -37,7 +37,7 @@ export const VenueDetails = ({ onClose, venueWithCheckins }: Props) => {
   );
 
   const [tab, setTab] = React.useState('checkins');
-  React.useEffect(
+  useEffect(
     () => setTab(photos?.length > ZERO ? 'photos' : 'checkins'),
     [venueId]
   );
@@ -47,11 +47,10 @@ export const VenueDetails = ({ onClose, venueWithCheckins }: Props) => {
 
   return (
     <Drawer
-      anchor={'right'}
+      anchor={'left'}
       elevation={12}
       PaperProps={{
         sx: {
-          mt: 10,
           p: 5,
           width: '55%'
         }
