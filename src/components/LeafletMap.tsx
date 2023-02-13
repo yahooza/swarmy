@@ -5,9 +5,9 @@ import type {
   FoursquareVenue,
   FoursquareVenueWithCheckins
 } from '../lib/Types';
-import MappedMarkers from './MappedMarkers';
+import LeafletMapMarkers from './LeafletMapMarkers';
 
-const Mapped = ({
+const LeafletMap = ({
   venues,
   onVenueSelected,
   origin,
@@ -16,7 +16,7 @@ const Mapped = ({
   venues: Map<string, FoursquareVenue>;
   activeVenueWithCheckins: FoursquareVenueWithCheckins | null | undefined;
   onVenueSelected: (venueId: string | null) => void;
-  origin: LatLngExpression;
+  origin: number[];
   zoom: number;
 }) => {
   return (
@@ -25,12 +25,12 @@ const Mapped = ({
         width: 'inherit',
         height: 'inherit'
       }}
-      center={origin}
+      center={origin as LatLngExpression}
       zoomControl={false}
       zoom={zoom}
       scrollWheelZoom={false}
     >
-      <MappedMarkers venues={venues} onVenueSelected={onVenueSelected} />
+      <LeafletMapMarkers venues={venues} onVenueSelected={onVenueSelected} />
       <TileLayer
         // eslint-disable-next-line max-len
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -41,4 +41,4 @@ const Mapped = ({
   );
 };
 
-export default Mapped;
+export default LeafletMap;

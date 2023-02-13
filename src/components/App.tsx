@@ -6,7 +6,10 @@ import { SnackbarProvider } from 'notistack';
 import { AppProvider } from './AppProvider';
 import Viewport from './Viewport';
 
-const MapConfig = {
+const MapConfig: {
+  latlng: number[];
+  zoom: number;
+} = {
   // eslint-disable-next-line no-magic-numbers
   latlng: [37.55305, -122.31909],
   zoom: 15

@@ -8,7 +8,7 @@ type Props = {
   onVenueSelected: (venueId: string | null) => void;
 };
 
-const MappedMarkers = ({ venues, onVenueSelected }: Props) => {
+const LeafletMapMarkers = ({ venues, onVenueSelected }: Props) => {
   return (
     <>
       {venues &&
@@ -36,4 +36,4 @@ const MappedMarkers = ({ venues, onVenueSelected }: Props) => {
   );
 };
 
-export default MappedMarkers;
+export default LeafletMapMarkers;

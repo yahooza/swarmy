@@ -1,4 +1,3 @@
-import type { LatLngExpression } from 'leaflet';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FETCH_LIMIT, MILLISECONDS_IN_1_SECOND } from '../lib/Constants';
@@ -17,7 +16,7 @@ import { isValidApiToken } from '../lib/Utils';
 import { AppContext, AppContextType } from './AppProvider';
 
 import Header from './Header';
-import Mapped from './Mapped';
+import LeafletMap from './LeafletMap';
 import Settings from './Settings';
 import { VenueDetails } from './VenueDetails';
 
@@ -193,11 +192,11 @@ const Viewport = ({ latlng, zoom }: MapConfig) => {
       {(!hasValidToken || settingsOpen) && (
         <Settings onToggleSettings={onToggleSettings} />
       )}
-      <Mapped
+      <LeafletMap
         venues={venues}
         activeVenueWithCheckins={activeVenueWithCheckins}
         onVenueSelected={onVenueSelected}
-        origin={latlng as LatLngExpression}
+        origin={latlng}
         zoom={zoom}
       />
     </>

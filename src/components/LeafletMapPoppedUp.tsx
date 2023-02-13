@@ -5,7 +5,7 @@ import { ZERO } from '../lib/Constants';
 import { Card, CardHeader, CardContent } from '@mui/material';
 import CheckinsList from './CheckinsList';
 
-const MappedPoppedUp = ({
+const LeafletMapPoppedUp = ({
   activeVenueWithCheckins,
   onVenueSelected
 }: {
@@ -57,4 +57,4 @@ const MappedPoppedUp = ({
   );
 };
 
-export default MappedPoppedUp;
+export default LeafletMapPoppedUp;
