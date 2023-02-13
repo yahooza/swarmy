@@ -60,7 +60,7 @@ const Viewport = ({ latlng, zoom }: MapConfig) => {
       });
       setVenues(new Map([...venues]));
       setCheckins(
-        checkins.concat(newCheckins).sort((a, b) => a.createdAt - b.createdAt)
+        checkins.concat(newCheckins).sort((a, b) => b.createdAt - a.createdAt)
       );
       return true;
     } catch (exception) {
@@ -186,6 +186,7 @@ const Viewport = ({ latlng, zoom }: MapConfig) => {
         onToggleSettings={onToggleSettings}
       />
       <VenueDetails
+        key={activeVenueWithCheckins?.venue.id}
         venueWithCheckins={activeVenueWithCheckins}
         onClose={() => onVenueSelected(null)}
       />

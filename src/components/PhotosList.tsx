@@ -19,24 +19,27 @@ const PhotosList = ({
       </Alert>
     );
   }
+
   return (
     <Masonry columns={3} spacing={1}>
-      {photos.map((photo) => {
-        const img = photo.prefix + FOURSQUARE_IMAGE_DIMENSIONS + photo.suffix;
-        return (
-          <div key={photo.id}>
-            <img
-              src={`${img}?w=162&auto=format`}
-              srcSet={`${img}?w=162&auto=format&dpr=2 2x`}
-              loading="lazy"
-              style={{
-                display: 'block',
-                width: '100%'
-              }}
-            />
-          </div>
-        );
-      })}
+      {photos
+        .sort((a, b) => b.createdAt - a.createdAt)
+        .map((photo) => {
+          const img = photo.prefix + FOURSQUARE_IMAGE_DIMENSIONS + photo.suffix;
+          return (
+            <div key={photo.id}>
+              <img
+                src={`${img}?w=162&auto=format`}
+                srcSet={`${img}?w=162&auto=format&dpr=2 2x`}
+                loading="lazy"
+                style={{
+                  display: 'block',
+                  width: '100%'
+                }}
+              />
+            </div>
+          );
+        })}
     </Masonry>
   );
 };
