@@ -1,12 +1,18 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogTitle,
   DialogContent,
+  Divider,
+  FormControlLabel,
+  FormGroup,
   FormHelperText,
   IconButton,
+  Link,
   Stack,
+  Switch,
   TextField
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -60,26 +66,38 @@ const Settings = ({
             minWidth: 500
           }}
         >
-          <TextField
-            autoComplete="off"
-            label="Token"
-            variant="standard"
-            defaultValue={token ?? ''}
-            inputRef={tokenRef}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
-              setTmpToken((event.target as HTMLInputElement).value)
-            }
-            sx={{
-              width: '100%'
-            }}
-          />
-          <FormHelperText>
-            Register a Foursquare API token{' '}
-            <a href={URL_4SQUARE_API_DOCS} target="_blank">
-              here
-            </a>
-            .
-          </FormHelperText>
+          <Stack
+            direction="column"
+            spacing={4}
+            divider={<Divider orientation="horizontal" flexItem />}
+          >
+            <Box>
+              <TextField
+                autoComplete="off"
+                label="Token"
+                variant="standard"
+                defaultValue={token ?? ''}
+                inputRef={tokenRef}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
+                  setTmpToken((event.target as HTMLInputElement).value)
+                }
+                sx={{
+                  width: '100%'
+                }}
+              />
+              <FormHelperText>
+                Register a Foursquare API token{' '}
+                <Link
+                  href={URL_4SQUARE_API_DOCS}
+                  color="inherit"
+                  target="_blank"
+                >
+                  here
+                </Link>
+                .
+              </FormHelperText>
+            </Box>
+          </Stack>
         </DialogContent>
         <DialogActions>
           <Stack direction="row" spacing={1.5}>

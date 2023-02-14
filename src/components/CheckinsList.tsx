@@ -2,7 +2,7 @@ import React from 'react';
 import { fromUnixTime, formatISO, format } from 'date-fns';
 import type { FoursquareCheckin } from '../lib/Types';
 
-import { Alert, AlertTitle, List, ListItem } from '@mui/material';
+import { Alert, AlertTitle, List, ListItem, Typography } from '@mui/material';
 import { ZERO, HUMAN_READABLE_DATETIME_FORMAT } from '../lib/Constants';
 
 /**
@@ -37,9 +37,13 @@ const CheckinsList = ({
               display: 'list-item'
             }}
           >
-            <time dateTime={formatISO(checkinTime)}>
+            <Typography
+              variant="body1"
+              component="time"
+              dateTime={formatISO(checkinTime)}
+            >
               {format(checkinTime, HUMAN_READABLE_DATETIME_FORMAT)}
-            </time>
+            </Typography>
           </ListItem>
         );
       })}

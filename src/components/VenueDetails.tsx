@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Drawer, Tab, Typography } from '@mui/material';
 import { ZERO } from '../lib/Constants';
@@ -15,13 +15,13 @@ type Props = {
 export const VenueDetails = ({ onClose, venueWithCheckins }: Props) => {
   const { t } = useTranslation();
   // Unique Venue
-  const venueId = React.useMemo(
+  const venueId = useMemo(
     () => venueWithCheckins?.venue?.id ?? null,
     [venueWithCheckins]
   );
 
   // Photos
-  const photos = React.useMemo(
+  const photos = useMemo(
     () =>
       venueWithCheckins?.checkins.reduce(
         (acc, checkin) => acc.concat(checkin.photos?.items ?? []),
@@ -31,12 +31,12 @@ export const VenueDetails = ({ onClose, venueWithCheckins }: Props) => {
   );
 
   // Checkins
-  const checkins = React.useMemo(
+  const checkins = useMemo(
     () => venueWithCheckins?.checkins ?? [],
     [venueWithCheckins?.checkins]
   );
 
-  const [tab, setTab] = React.useState('checkins');
+  const [tab, setTab] = useState('checkins');
   useEffect(
     () => setTab(photos?.length > ZERO ? 'photos' : 'checkins'),
     [venueId]
@@ -51,8 +51,8 @@ export const VenueDetails = ({ onClose, venueWithCheckins }: Props) => {
       elevation={12}
       PaperProps={{
         sx: {
-          p: 5,
-          width: '55%'
+          p: 3,
+          width: '50%'
         }
       }}
       open={venueWithCheckins != null}
