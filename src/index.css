@@ -7,14 +7,13 @@
     hue-rotate(200deg) saturate(0.3) brightness(0.7);
 }
 
-@media (prefers-color-scheme: dark) {
-  .leaflet-tile {
-    filter: var(--leaflet-tile-filter, none);
-  }
+/* @media (prefers-color-scheme: dark) { */
+.has-dark-mode .leaflet-tile {
+  filter: var(--leaflet-tile-filter, none);
+}
 
-  .leaflet-container {
-    background: #111;
-  }
+.has-dark-mode .leaflet-container {
+  background: #111;
 }
 
 html {

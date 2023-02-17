@@ -5,20 +5,37 @@ import {
   DialogActions,
   DialogTitle,
   DialogContent,
-  Divider,
   FormControlLabel,
   FormGroup,
   FormHelperText,
+  Grid,
   IconButton,
   Link,
-  Stack,
   Switch,
-  TextField
+  TextField,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  Radio,
+  Stack,
+  Typography
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { useMemo } from 'react';
+import React, {
+  FormEvent,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { useTranslation } from 'react-i18next';
-import { ToggleModalCallback, UserSettingsKey } from '../lib/Types';
+import {
+  Languages,
+  ToggleModalCallback,
+  UserSettings,
+  UserSettingsKey
+} from '../lib/Types';
 import { isValidApiToken } from '../lib/Utils';
 import { URL_4SQUARE_API_DOCS } from '../lib/Constants';
 import { AppContext, AppContextType } from './AppProvider';
@@ -28,22 +45,27 @@ const Settings = ({
 }: {
   onToggleSettings: ToggleModalCallback;
 }) => {
-  const { token, updateUserSettings } = React.useContext(
+  const { token, userSettings, updateUserSettings } = useContext(
     AppContext
   ) as AppContextType;
   const { t } = useTranslation();
 
+  console.log('userSettings', userSettings);
+
   // Used to validate the unsaved token
-  const [tmpToken, setTmpToken] = React.useState<string>(token ?? '');
-  const tokenRef = React.useRef<HTMLInputElement>(null);
+  const [tmpToken, setTmpToken] = useState<string>(token ?? '');
+  const tokenRef = useRef<HTMLInputElement>(null);
 
-  const onSave = React.useCallback(() => {
-    updateUserSettings({
-      [UserSettingsKey.Token]: tokenRef?.current?.value
-    });
-  }, [updateUserSettings]);
+  const saveUserSettings = useCallback(
+    (updates: UserSettings): void => {
+      updateUserSettings({
+        ...updates
+      });
+    },
+    [updateUserSettings]
+  );
 
-  const onRemove = React.useCallback(() => {
+  const onRemove = useCallback(() => {
     if (window.confirm(t('question.delete_token'))) {
       updateUserSettings({
         [UserSettingsKey.Token]: null
@@ -58,34 +80,43 @@ const Settings = ({
   );
 
   return (
-    <Dialog onClose={() => onToggleSettings(false)} open={true}>
-      <form onSubmit={onSave}>
+    <Dialog
+      fullWidth={true}
+      maxWidth="lg"
+      onClose={() => onToggleSettings(false)}
+      open={true}
+    >
+      <form
+        onSubmit={(event: FormEvent<HTMLFormElement>) => {
+          saveUserSettings({
+            [UserSettingsKey.Token]: tokenRef?.current?.value
+          });
+        }}
+      >
         <DialogTitle>{t('settings')}</DialogTitle>
         <DialogContent
           sx={{
             minWidth: 500
           }}
         >
-          <Stack
-            direction="column"
-            spacing={4}
-            divider={<Divider orientation="horizontal" flexItem />}
-          >
-            <Box>
+          <Grid container spacing={5}>
+            <Grid item xs={12} lg={6}>
+              <Typography variant="h5">{t('api_access')}</Typography>
               <TextField
-                autoComplete="off"
                 label="Token"
-                variant="standard"
+                autoComplete="off"
+                variant="outlined"
                 defaultValue={token ?? ''}
                 inputRef={tokenRef}
+                color={isSavable ? 'success' : 'warning'}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
                   setTmpToken((event.target as HTMLInputElement).value)
                 }
-                sx={{
-                  width: '100%'
-                }}
+                placeholder="API Token"
+                fullWidth
+                sx={{ mt: 2 }}
               />
-              <FormHelperText>
+              <Typography variant="body1" sx={{ mt: 2 }}>
                 Register a Foursquare API token{' '}
                 <Link
                   href={URL_4SQUARE_API_DOCS}
@@ -95,9 +126,68 @@ const Settings = ({
                   here
                 </Link>
                 .
-              </FormHelperText>
-            </Box>
-          </Stack>
+              </Typography>
+            </Grid>
+            <Grid item xs={12} lg={6}>
+              <Typography variant="h5">{t('appearance')}</Typography>
+              <FormControl>
+                <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                  {t('preferred_langauge')}
+                </Typography>
+                <RadioGroup
+                  aria-labelledby="settings-language"
+                  value={userSettings[UserSettingsKey.Language]}
+                  name="settings-language"
+                  onChange={(
+                    event: React.ChangeEvent<HTMLInputElement>
+                  ): void => {
+                    saveUserSettings({
+                      [UserSettingsKey.Language]: (
+                        event.target as HTMLInputElement
+                      ).value as Languages
+                    });
+                  }}
+                  sx={{ mt: 2 }}
+                >
+                  <FormControlLabel
+                    value={Languages.ENGLISH}
+                    control={<Radio />}
+                    label={t('languages.english')}
+                  />
+                  <FormControlLabel
+                    value={Languages.GERMAN}
+                    control={<Radio />}
+                    label={t('languages.german')}
+                  />
+                  <FormControlLabel
+                    value={Languages.THAI}
+                    control={<Radio />}
+                    label={t('languages.thai')}
+                  />
+                </RadioGroup>
+              </FormControl>
+              <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                {t('dark_mode')}
+              </Typography>
+              <FormGroup sx={{ mt: 2 }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={userSettings[UserSettingsKey.DarkMode] === true}
+                      onChange={(
+                        event: React.ChangeEvent<HTMLInputElement>
+                      ) => {
+                        saveUserSettings({
+                          [UserSettingsKey.DarkMode]: event.target.checked
+                        });
+                      }}
+                    />
+                  }
+                  label=""
+                />
+              </FormGroup>
+            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Stack direction="row" spacing={1.5}>

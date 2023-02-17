@@ -23,11 +23,25 @@ export interface MapConfig {
  * @see ./src/config.json.default (for the app config)
  */
 export enum UserSettingsKey {
-  Token = 'token'
+  Token = 'token',
+  Language = 'language',
+  DarkMode = 'darkmode'
+}
+
+/**
+ * Config (both User & App)
+ * @see ./src/config.json.default (for the app config)
+ */
+export enum Languages {
+  ENGLISH = 'en',
+  GERMAN = 'de',
+  THAI = 'th'
 }
 
 export interface UserSettings {
   [UserSettingsKey.Token]?: string | undefined;
+  [UserSettingsKey.Language]?: Languages;
+  [UserSettingsKey.DarkMode]?: boolean;
 }
 
 // when the User wants to update the Config

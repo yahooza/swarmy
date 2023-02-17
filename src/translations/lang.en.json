@@ -1,20 +1,29 @@
 {
   "language": "en",
+  "app": {
+    "name": "FourMaps"
+  },
   "translation": {
-    "settings": "Settings",
+    "api_access": "API Access",
+    "appearance": "Appearance",
     "checkins": "Checkins",
+    "dark_mode": "Dark Mode",
+    "settings": "Settings",
+    "photos": "Photos",
+    "preferred_langauge": "Preferred Language",
     "venues": "Venues",
     "venue_details": "Venue details",
-    "photos": "Photos",
-    "app": {
-      "name": "FourMaps"
-    },
     "action": {
       "cancel": "Cancel",
       "delete": "Delete",
       "save": "Save",
       "search_venues": "Search Venues",
       "submit": "Submit"
+    },
+    "languages": {
+      "english": "English",
+      "german": "German",
+      "thai": "Thai"
     },
     "time": {
       "since_sometime_ago": "Since"

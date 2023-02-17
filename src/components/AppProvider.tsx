@@ -14,13 +14,17 @@ import {
   MessageCallback,
   UserSettings,
   UserSettingsKey,
-  UpdateSettingsCallback
+  UpdateSettingsCallback,
+  Languages
 } from '../lib/Types';
+import { useState, useEffect, FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export type AppContextType = {
   token: string | null;
   environment: string;
   sendMessage: MessageCallback;
+  userSettings: UserSettings;
   updateUserSettings: UpdateSettingsCallback;
 };
 
@@ -30,20 +34,30 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const AppProvider: React.FC<Props> = ({ children }) => {
+export const AppProvider: FC<Props> = ({ children }) => {
+  const { i18n } = useTranslation();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [userSettings, setUserSettings] = useLocalStorage<UserSettings>(
     STORAGE_SETTINGS_KEY,
     {
-      [UserSettingsKey.Token]: null
+      [UserSettingsKey.Token]: null,
+      [UserSettingsKey.Language]: Languages.ENGLISH,
+      [UserSettingsKey.DarkMode]:
+        (window.matchMedia &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+        false
     }
   );
 
-  const [environment] = React.useState<string>(
+  const [environment] = useState<string>(
     location.hostname.toLowerCase() !== 'localhost'
       ? 'production'
       : 'development'
   );
+
+  useEffect(() => {
+    i18n.changeLanguage(userSettings[UserSettingsKey.Language]);
+  }, [userSettings[UserSettingsKey.Language]]);
 
   /**
    * LocalStorage stuff.
@@ -114,6 +128,7 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
         environment,
         token: userSettings[UserSettingsKey.Token],
         sendMessage,
+        userSettings,
         updateUserSettings
       }}
     >

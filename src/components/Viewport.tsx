@@ -10,7 +10,8 @@ import {
   FoursquareVenueWithCheckins,
   MapConfig,
   ToggleModalCallback,
-  MessageKey
+  MessageKey,
+  UserSettingsKey
 } from '../lib/Types';
 import { isValidApiToken } from '../lib/Utils';
 import { AppContext, AppContextType } from './AppProvider';
@@ -19,12 +20,19 @@ import Header from './Header';
 import LeafletMap from './LeafletMap';
 import Settings from './Settings';
 import { VenueDetails } from './VenueDetails';
+import { Box } from '@mui/material';
 
 const Viewport = ({ latlng, zoom }: MapConfig) => {
   const { t } = useTranslation();
-  const { environment, token, sendMessage } = useContext(
+  const { environment, userSettings, sendMessage } = useContext(
     AppContext
   ) as AppContextType;
+
+  const token = useMemo(
+    () => userSettings[UserSettingsKey.Token],
+    [userSettings[UserSettingsKey.Token]]
+  );
+
   const [fetchState, setFetchState] = useState<FetchState>(() => {
     const timestamp = Math.floor(
       new Date().getTime() / MILLISECONDS_IN_1_SECOND
@@ -177,7 +185,15 @@ const Viewport = ({ latlng, zoom }: MapConfig) => {
   };
 
   return (
-    <>
+    <Box
+      sx={{
+        width: '100%',
+        height: '100%'
+      }}
+      className={
+        userSettings[UserSettingsKey.DarkMode] === true ? 'has-dark-mode' : ''
+      }
+    >
       <Header
         checkins={checkins}
         venues={venues}
@@ -200,7 +216,7 @@ const Viewport = ({ latlng, zoom }: MapConfig) => {
         origin={latlng}
         zoom={zoom}
       />
-    </>
+    </Box>
   );
 };
 

@@ -1,17 +1,26 @@
 {
   "language": "de",
   "translation": {
+    "api_access": "API Access",
+    "appearance": "Aussehen",
     "settings": "die Einstellungen",
     "checkins": "Einchecken",
+    "dark_mode": "Dunkler Modus",
     "venues": "Veranstaltungsorte",
     "venue_details": "Einzelheiten zum Veranstaltungsort",
     "photos": "Fotos",
+    "preferred_langauge": "Bevorzugte Sprache",
     "action": {
       "cancel": "Stornieren",
       "delete": "Löschen",
       "search_venues": "Veranstaltungsorte suchen",
       "save": "Speichern",
       "submit": "Einreichen"
+    },
+    "languages": {
+      "english": "Englisch",
+      "german": "Deutsch",
+      "thai": "Thailändisch"
     },
     "time": {
       "since_sometime_ago": "Seit"

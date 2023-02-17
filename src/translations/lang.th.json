@@ -1,0 +1,35 @@
+{
+  "language": "th",
+  "translation": {
+    "api_access": "การเข้าถึง API",
+    "appearance": "รูปร่าง",
+    "checkins": "เช็คอิน",
+    "dark_mode": "โหมดมืด",
+    "preferred_langauge": "ภาษาที่ต้องการ",
+    "settings": "การตั้งค่า",
+    "venues": "สถานที่จัดงาน",
+    "venue_details": "รายละเอียดสถานที่",
+    "photos": "ภาพถ่าย",
+    "action": {
+      "cancel": "ยกเลิก",
+      "delete": "ลบ",
+      "save": "บันทึก",
+      "search_venues": "ค้นหาสถานที่",
+      "submit": "ส่ง"
+    },
+    "languages": {
+      "english": "ภาษาอังกฤษ",
+      "german": "ภาษาเยอรมัน",
+      "thai": "แบบไทย"
+    },
+    "time": {
+      "since_sometime_ago": "เนื่องจาก"
+    },
+    "question": {
+      "delete_token": "คุณแน่ใจหรือไม่ว่าต้องการลบโทเค็นนี้"
+    },
+    "message": {
+      "error-processing-checkins": "ดำเนินการเช็คอินไม่สำเร็จ"
+    }
+  }
+}
