@@ -16,7 +16,7 @@ import type {
   FoursquareVenue,
   ToggleModalCallback
 } from '../lib/Types';
-import { HUMAN_READABLE_DATE_FORMAT, ZERO } from '../lib/Constants';
+import { ZERO } from '../lib/Constants';
 import HeaderMetric from './HeaderMetric';
 import { useTranslation } from 'react-i18next';
 
@@ -48,10 +48,7 @@ const Header = ({
           name={t('time.since_sometime_ago')}
           value={
             first && first.createdAt
-              ? format(
-                  fromUnixTime(first.createdAt),
-                  HUMAN_READABLE_DATE_FORMAT
-                )
+              ? format(fromUnixTime(first.createdAt), t('time.date_format'))
               : null
           }
           size="large"

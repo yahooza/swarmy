@@ -103,7 +103,7 @@ const Settings = ({
             <Grid item xs={12} lg={6}>
               <Typography variant="h5">{t('api_access')}</Typography>
               <TextField
-                label="Token"
+                label={t('token')}
                 autoComplete="off"
                 variant="outlined"
                 defaultValue={token ?? ''}
@@ -115,6 +115,20 @@ const Settings = ({
                 placeholder="API Token"
                 fullWidth
                 sx={{ mt: 2 }}
+                InputProps={{
+                  endAdornment: (
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      disabled={!isSavable}
+                      sx={{
+                        ml: 3
+                      }}
+                    >
+                      {t('action.save')}
+                    </Button>
+                  )
+                }}
               />
               <Typography variant="body1" sx={{ mt: 2 }}>
                 Register a Foursquare API token{' '}
@@ -191,15 +205,12 @@ const Settings = ({
         </DialogContent>
         <DialogActions>
           <Stack direction="row" spacing={1.5}>
-            <Button type="submit" variant="contained" disabled={!isSavable}>
-              {t('action.save')}
-            </Button>
             <Button
               variant="outlined"
               onClick={() => onToggleSettings(false)}
               disabled={!isSavable}
             >
-              {t('action.cancel')}
+              {t('action.close')}
             </Button>
           </Stack>
           <IconButton

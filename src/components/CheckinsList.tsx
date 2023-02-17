@@ -3,7 +3,8 @@ import { fromUnixTime, formatISO, format } from 'date-fns';
 import type { FoursquareCheckin } from '../lib/Types';
 
 import { Alert, AlertTitle, List, ListItemText } from '@mui/material';
-import { ZERO, HUMAN_READABLE_DATETIME_FORMAT } from '../lib/Constants';
+import { ZERO } from '../lib/Constants';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Displays a list of checkins
@@ -15,6 +16,8 @@ const CheckinsList = ({
 }: {
   checkins: FoursquareCheckin[] | null | undefined;
 }) => {
+  const { t } = useTranslation();
+
   if (checkins == null || checkins.length <= ZERO) {
     return (
       <Alert severity="info">
@@ -36,7 +39,7 @@ const CheckinsList = ({
             }}
           >
             <time dateTime={formatISO(checkinTime)}>
-              {format(checkinTime, HUMAN_READABLE_DATETIME_FORMAT)}
+              {format(checkinTime, t('time.datetime_format'))}
             </time>
           </ListItemText>
         );

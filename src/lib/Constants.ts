@@ -23,10 +23,6 @@ export const FETCH_OFFSET_IN_MILLISECONDS = 1;
 // LocalStorage!
 export const STORAGE_SETTINGS_KEY = 'app-localstorage-app-config-key';
 
-// Dates, times, etc.
-export const HUMAN_READABLE_DATETIME_FORMAT = 'PPpp';
-export const HUMAN_READABLE_DATE_FORMAT = 'PP';
-
 // URLs
 export const URL_4SQ_V2_ENDPOINT_CHECKINS =
   'https://api.foursquare.com/v2/users/self/checkins';

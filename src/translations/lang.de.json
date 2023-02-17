@@ -12,6 +12,7 @@
     "preferred_langauge": "Bevorzugte Sprache",
     "action": {
       "cancel": "Stornieren",
+      "close": "Schließen",
       "delete": "Löschen",
       "search_venues": "Veranstaltungsorte suchen",
       "save": "Speichern",

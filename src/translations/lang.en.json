@@ -11,11 +11,14 @@
     "settings": "Settings",
     "photos": "Photos",
     "preferred_langauge": "Preferred Language",
+    "token": "Token",
     "venues": "Venues",
     "venue_details": "Venue details",
     "action": {
       "cancel": "Cancel",
+      "close": "Close",
       "delete": "Delete",
+      "done": "Done",
       "save": "Save",
       "search_venues": "Search Venues",
       "submit": "Submit"
@@ -26,7 +29,9 @@
       "thai": "Thai"
     },
     "time": {
-      "since_sometime_ago": "Since"
+      "since_sometime_ago": "Since",
+      "date_format": "PP",
+      "datetime_format": "PPpp"
     },
     "question": {
       "delete_token": "Are you sure you want to delete this token?"

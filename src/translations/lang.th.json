@@ -12,6 +12,7 @@
     "photos": "ภาพถ่าย",
     "action": {
       "cancel": "ยกเลิก",
+      "close": "ปิด",
       "delete": "ลบ",
       "save": "บันทึก",
       "search_venues": "ค้นหาสถานที่",
