@@ -18,7 +18,8 @@ import {
   RadioGroup,
   Radio,
   Stack,
-  Typography
+  Typography,
+  Alert
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import React, {
@@ -74,7 +75,7 @@ const Settings = ({
     }
   }, [updateUserSettings]);
 
-  const isSavable = useMemo(
+  const isValid = useMemo(
     () => isValidApiToken({ token: tmpToken }),
     [tmpToken]
   );
@@ -108,19 +109,18 @@ const Settings = ({
                 variant="outlined"
                 defaultValue={token ?? ''}
                 inputRef={tokenRef}
-                color={isSavable ? 'success' : 'warning'}
+                color={isValid ? 'success' : 'warning'}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
                   setTmpToken((event.target as HTMLInputElement).value)
                 }
                 placeholder="API Token"
                 fullWidth
-                sx={{ mt: 2 }}
                 InputProps={{
                   endAdornment: (
                     <Button
                       type="submit"
                       variant="contained"
-                      disabled={!isSavable}
+                      disabled={!isValid}
                       sx={{
                         ml: 3
                       }}
@@ -129,8 +129,21 @@ const Settings = ({
                     </Button>
                   )
                 }}
+                sx={{ mt: 2 }}
               />
-              <Typography variant="body1" sx={{ mt: 2 }}>
+              <Box>
+                {!isValid ? (
+                  <Alert severity="warning">
+                    The API token doesn't look right...
+                  </Alert>
+                ) : (
+                  <Alert severity="success">The API token looks good!</Alert>
+                )}
+              </Box>
+              <Typography variant="subtitle1" sx={{ mt: 2 }}>
+                How to get a token?
+              </Typography>
+              <Typography variant="body2" sx={{ mt: 2 }}>
                 Register a Foursquare API token{' '}
                 <Link
                   href={URL_4SQUARE_API_DOCS}
@@ -208,7 +221,7 @@ const Settings = ({
             <Button
               variant="outlined"
               onClick={() => onToggleSettings(false)}
-              disabled={!isSavable}
+              disabled={!isValid}
             >
               {t('action.close')}
             </Button>
