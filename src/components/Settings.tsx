@@ -7,17 +7,14 @@ import {
   DialogContent,
   FormControlLabel,
   FormGroup,
-  FormHelperText,
   Grid,
   IconButton,
   Link,
   Switch,
   TextField,
   FormControl,
-  FormLabel,
   RadioGroup,
   Radio,
-  Stack,
   Typography,
   Alert
 } from '@mui/material';
@@ -218,23 +215,24 @@ const Settings = ({
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Stack direction="row" spacing={1.5}>
-            <Button
-              variant="outlined"
-              onClick={() => onToggleSettings(false)}
-              disabled={!isValid}
-            >
-              {t('action.close')}
-            </Button>
-          </Stack>
-          <IconButton
-            color="error"
-            aria-label={t('action.delete')}
-            onClick={onRemove}
-            disabled={tmpToken.length < 1}
+          <Button
+            variant="outlined"
+            onClick={() => onToggleSettings(false)}
+            disabled={!isValid}
+            fullWidth
           >
-            <DeleteIcon />
-          </IconButton>
+            {t('action.close')}
+          </Button>
+          {false && (
+            <IconButton
+              color="error"
+              aria-label={t('action.delete')}
+              onClick={onRemove}
+              disabled={tmpToken.length < 1}
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
         </DialogActions>
       </form>
     </Dialog>
