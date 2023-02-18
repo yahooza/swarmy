@@ -89,6 +89,7 @@ const Settings = ({
     >
       <form
         onSubmit={(event: FormEvent<HTMLFormElement>) => {
+          event.preventDefault();
           saveUserSettings({
             [UserSettingsKey.Token]: tokenRef?.current?.value
           });
