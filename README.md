@@ -4,7 +4,17 @@ Fourmaps: updated with modern JavaScript
 
 ## Install
 
+```
+yarn install
+```
+
 ## Reference
+
+### Maps
+
+- Leaflet
+  - [React Leaflet](https://react-leaflet.js.org/docs/api-map/)
+  - [Leaflet API reference](https://leafletjs.com/reference.html)
 
 ### Foursquare API
 
@@ -20,5 +30,7 @@ Fourmaps: updated with modern JavaScript
 
 ### 3rd party libs
 
-- usehooks-ts [usehooks-ts](https://github.com/juliencrn/usehooks-ts)
-- Multi-Snackbars! [https://notistack.com/](https://notistack.com/)
+- [Material UI Core](https://mui.com/material-ui/getting-started/overview/)
+- [date-fns](https://date-fns.org/docs/Getting-Started)
+- [usehooks-ts](https://github.com/juliencrn/usehooks-ts)
+- [Multi-Snackbars](https://notistack.com/)
