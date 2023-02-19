@@ -41,7 +41,6 @@ module.exports = function (env, argv) {
     plugins: [
       new HtmlWebpackPlugin({
         hash: true,
-        title: 'FourMaps - Vol 2',
         template: 'src/index.html',
         minify: {
           minifyCSS: true,
