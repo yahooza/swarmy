@@ -1,12 +1,14 @@
-# fourmaps-two
+# Swarmy
 
-Fourmaps: updated with modern JavaScript
+See your past Swarm / Foursquare checkins on a map.
 
 ## Install
 
 ```
 yarn install
 ```
+
+Set your API access token.
 
 ## Reference
 
