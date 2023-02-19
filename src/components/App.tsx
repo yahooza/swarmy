@@ -33,7 +33,7 @@ const App = () => {
         autoHideDuration={1500}
       >
         <AppProvider>
-          <Viewport {...MapConfig} />
+          <Viewport latlng={MapConfig.latlng} zoom={MapConfig.zoom} />
         </AppProvider>
       </SnackbarProvider>
     </ThemeProvider>

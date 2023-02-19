@@ -43,15 +43,15 @@ const Settings = ({
 }: {
   onToggleSettings: ToggleModalCallback;
 }) => {
-  const { token, userSettings, updateUserSettings } = useContext(
+  const { userSettings, updateUserSettings } = useContext(
     AppContext
   ) as AppContextType;
   const { t } = useTranslation();
 
-  console.log('userSettings', userSettings);
-
   // Used to validate the unsaved token
-  const [tmpToken, setTmpToken] = useState<string>(token ?? '');
+  const [tmpToken, setTmpToken] = useState<string>(
+    userSettings[UserSettingsKey.Token] ?? ''
+  );
   const tokenRef = useRef<HTMLInputElement>(null);
 
   const saveUserSettings = useCallback(
@@ -105,7 +105,7 @@ const Settings = ({
                 label={t('token')}
                 autoComplete="off"
                 variant="outlined"
-                defaultValue={token ?? ''}
+                defaultValue={userSettings[UserSettingsKey.Token] ?? ''}
                 inputRef={tokenRef}
                 color={isValid ? 'success' : 'warning'}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>

@@ -21,7 +21,6 @@ import { useState, useEffect, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export type AppContextType = {
-  token: string | null;
   environment: string;
   sendMessage: MessageCallback;
   userSettings: UserSettings;
@@ -126,7 +125,6 @@ export const AppProvider: FC<Props> = ({ children }) => {
     <AppContext.Provider
       value={{
         environment,
-        token: userSettings[UserSettingsKey.Token],
         sendMessage,
         userSettings,
         updateUserSettings
