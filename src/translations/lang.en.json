@@ -1,9 +1,9 @@
 {
   "language": "en",
-  "app": {
-    "name": "FourMaps"
-  },
   "translation": {
+    "app": {
+      "name": "FourMaps"
+    },
     "api_access": "API Access",
     "appearance": "Appearance",
     "checkins": "Checkins",
