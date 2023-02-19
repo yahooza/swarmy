@@ -38,3 +38,8 @@ yarn dev
 - [date-fns](https://date-fns.org/docs/Getting-Started)
 - [usehooks-ts](https://github.com/juliencrn/usehooks-ts)
 - [Multi-Snackbars](https://notistack.com/)
+
+### Tests
+
+- [React Testing Library](https://github.com/testing-library/react-testing-library)
+- [Intro to React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
