@@ -1,14 +1,16 @@
 # Swarmy
 
-See your past Swarm / Foursquare checkins on a map.
+Map your past Foursquare checkins.
 
 ## Install
 
 ```
 yarn install
+yarn dev
 ```
 
-Set your API access token.
+1. Go to [//localhost:9500](http://localhost:9500).
+2. Enter your Foursquare API access token.
 
 ## Reference
 

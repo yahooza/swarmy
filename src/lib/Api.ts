@@ -47,7 +47,7 @@ export const fetchCheckins = async ({
             );
           default:
             throw new Error(
-              `Fetching data from Foursquare has errored out. Please tyr again.`
+              `Fetching data from Foursquare has errored out. Please try again.`
             );
         }
       }

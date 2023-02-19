@@ -37,7 +37,9 @@
       "delete_token": "Are you sure you want to delete this token?"
     },
     "message": {
-      "error-processing-checkins": "Failed to process checkins"
+      "error-processing-checkins": "Failed to process checkins",
+      "error-fetching-from-api": "Fetching data from Foursquare has errored out. Please try again.",
+      "error-fetching-401": "Authentication failed. Please check your API token."
     }
   }
 }
