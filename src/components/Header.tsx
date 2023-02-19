@@ -36,8 +36,6 @@ const Header = ({
   const { t } = useTranslation();
   const first = checkins.slice(-1)[0];
 
-  console.log(checkins);
-
   return (
     <AppBar position="fixed" sx={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
       <Toolbar
