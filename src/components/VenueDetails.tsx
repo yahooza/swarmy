@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Drawer, Tab, Typography } from '@mui/material';
+import { Box, Drawer, styled, Tab, Typography } from '@mui/material';
 import { ZERO } from '../lib/Constants';
 import { FoursquareVenueWithCheckins } from '../lib/Types';
 import CheckinsList from './CheckinsList';
@@ -48,11 +48,12 @@ export const VenueDetails = ({ onClose, venueWithCheckins }: Props) => {
   return (
     <Drawer
       anchor={'left'}
+      hideBackdrop={false}
       elevation={12}
       PaperProps={{
         sx: {
           p: 3,
-          width: '50%'
+          width: '35%'
         }
       }}
       open={venueWithCheckins != null}

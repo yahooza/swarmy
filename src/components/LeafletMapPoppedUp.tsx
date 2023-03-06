@@ -1,9 +1,10 @@
-import React from 'react';
-import { Popup, useMapEvents } from 'react-leaflet';
+import React, { useEffect, useMemo } from 'react';
+import { Popup, useMap, useMapEvents } from 'react-leaflet';
 import type { FoursquareVenueWithCheckins } from '../lib/Types';
-import { ZERO } from '../lib/Constants';
-import { Card, CardHeader, CardContent } from '@mui/material';
-import CheckinsList from './CheckinsList';
+import { Typography } from '@mui/material';
+import L from 'leaflet';
+
+const GRID_SIZE_OFFSET = 4;
 
 const LeafletMapPoppedUp = ({
   activeVenueWithCheckins,
@@ -12,47 +13,45 @@ const LeafletMapPoppedUp = ({
   activeVenueWithCheckins: FoursquareVenueWithCheckins;
   onVenueSelected: (venueId: string | null) => void;
 }) => {
+  const map = useMap();
+  const { lat, lng } = useMemo(() => {
+    const { lat, lng } = activeVenueWithCheckins.venue.location;
+    return {
+      lat,
+      lng
+    };
+  }, [activeVenueWithCheckins.venue.location]);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const map = useMapEvents({
+  const mapEvents = useMapEvents({
     popupclose() {
       onVenueSelected(null);
     }
   });
-  const { lat, lng } = activeVenueWithCheckins.venue.location;
+
+  useEffect(() => {
+    if (lat == null || lng == null) {
+      return;
+    }
+
+    const container = map.getContainer();
+    const offset = [
+      container.offsetWidth / GRID_SIZE_OFFSET,
+      container.offsetHeight / GRID_SIZE_OFFSET
+    ];
+
+    const point = map.latLngToContainerPoint(L.latLng([lat, lng]));
+    const newPoint = L.point([point.x - offset[0], point.y + offset[1]]);
+
+    map.flyTo(map.containerPointToLatLng(newPoint), map.getZoom());
+  }, [lat, lng]);
 
   return (
     <Popup position={[lat, lng]} minWidth={300} maxHeight={500}>
-      <Card
-        sx={{
-          mx: -1.5,
-          boxShadow: 'none'
-        }}
-      >
-        <CardHeader
-          title={activeVenueWithCheckins.venue.name}
-          // eslint-disable-next-line max-len
-          subheader={activeVenueWithCheckins.venue.location.formattedAddress.join(
-            '\n'
-          )}
-          subheaderTypographyProps={{
-            sx: {
-              lineHeight: 'initial'
-            }
-          }}
-          sx={{
-            py: 0
-          }}
-        />
-        <CardContent
-          sx={{
-            py: 0
-          }}
-        >
-          {activeVenueWithCheckins.checkins.length > ZERO && (
-            <CheckinsList checkins={activeVenueWithCheckins.checkins} />
-          )}
-        </CardContent>
-      </Card>
+      <Typography variant="h5">{activeVenueWithCheckins.venue.name}</Typography>
+      <Typography variant="subtitle1">
+        {activeVenueWithCheckins.venue.location.formattedAddress.join('\n')}
+      </Typography>
     </Popup>
   );
 };

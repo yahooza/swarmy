@@ -6,10 +6,12 @@ import type {
   FoursquareVenueWithCheckins
 } from '../lib/Types';
 import LeafletMapMarkers from './LeafletMapMarkers';
+import LeafletMapPoppedUp from './LeafletMapPoppedUp';
 
 const LeafletMap = ({
   venues,
   onVenueSelected,
+  activeVenueWithCheckins,
   origin,
   zoom
 }: {
@@ -31,6 +33,12 @@ const LeafletMap = ({
       scrollWheelZoom={false}
     >
       <LeafletMapMarkers venues={venues} onVenueSelected={onVenueSelected} />
+      {activeVenueWithCheckins && (
+        <LeafletMapPoppedUp
+          activeVenueWithCheckins={activeVenueWithCheckins}
+          onVenueSelected={onVenueSelected}
+        />
+      )}
       <TileLayer
         // eslint-disable-next-line max-len
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
